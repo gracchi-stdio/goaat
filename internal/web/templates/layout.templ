@@ -1,60 +1,25 @@
 package templates
 
+import "os"
+
 // Base layout component that wraps all pages
 templ Layout(title string) {
 	<!DOCTYPE html>
-	<html lang="en">
+	<html lang="en" class="sl-theme-dark">
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<title>{ title } - Goaat</title>
-			<style>
-				* {
-					margin: 0;
-					padding: 0;
-					box-sizing: border-box;
-				}
-				body {
-					font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-					line-height: 1.6;
-					color: #333;
-					background: #f5f5f5;
-				}
-				nav {
-					background: #2c3e50;
-					color: white;
-					padding: 1rem 2rem;
-					box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-				}
-				nav ul {
-					list-style: none;
-					display: flex;
-					gap: 2rem;
-				}
-				nav a {
-					color: white;
-					text-decoration: none;
-					font-weight: 500;
-					transition: color 0.3s;
-				}
-				nav a:hover {
-					color: #3498db;
-				}
-				.container {
-					max-width: 1200px;
-					margin: 2rem auto;
-					padding: 2rem;
-					background: white;
-					border-radius: 8px;
-					box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-				}
-				footer {
-					text-align: center;
-					padding: 2rem;
-					color: #7f8c8d;
-					margin-top: 2rem;
-				}
-			</style>
+			if os.Getenv("ENV") == "development" {
+				<!-- Vite Dev Server -->
+				<script type="module" src="http://localhost:5173/@vite/client"></script>
+				<script type="module" src="http://localhost:5173/assets/js/main.js"></script>
+			} else {
+				<!-- Production Assets -->
+				<link rel="stylesheet" href="/css/main.css"/>
+				<script type="module" src="/js/main.js"></script>
+			}
+		
 		</head>
 		<body>
 			<nav>

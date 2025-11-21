@@ -8,6 +8,8 @@ package templates
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
+import "os"
+
 // Base layout component that wraps all pages
 func Layout(title string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -30,20 +32,35 @@ func Layout(title string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\" class=\"sl-theme-dark\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/templates/layout.templ`, Line: 10, Col: 17}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/templates/layout.templ`, Line: 12, Col: 17}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " - Goaat</title><style>\n\t\t\t\t* {\n\t\t\t\t\tmargin: 0;\n\t\t\t\t\tpadding: 0;\n\t\t\t\t\tbox-sizing: border-box;\n\t\t\t\t}\n\t\t\t\tbody {\n\t\t\t\t\tfont-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;\n\t\t\t\t\tline-height: 1.6;\n\t\t\t\t\tcolor: #333;\n\t\t\t\t\tbackground: #f5f5f5;\n\t\t\t\t}\n\t\t\t\tnav {\n\t\t\t\t\tbackground: #2c3e50;\n\t\t\t\t\tcolor: white;\n\t\t\t\t\tpadding: 1rem 2rem;\n\t\t\t\t\tbox-shadow: 0 2px 4px rgba(0,0,0,0.1);\n\t\t\t\t}\n\t\t\t\tnav ul {\n\t\t\t\t\tlist-style: none;\n\t\t\t\t\tdisplay: flex;\n\t\t\t\t\tgap: 2rem;\n\t\t\t\t}\n\t\t\t\tnav a {\n\t\t\t\t\tcolor: white;\n\t\t\t\t\ttext-decoration: none;\n\t\t\t\t\tfont-weight: 500;\n\t\t\t\t\ttransition: color 0.3s;\n\t\t\t\t}\n\t\t\t\tnav a:hover {\n\t\t\t\t\tcolor: #3498db;\n\t\t\t\t}\n\t\t\t\t.container {\n\t\t\t\t\tmax-width: 1200px;\n\t\t\t\t\tmargin: 2rem auto;\n\t\t\t\t\tpadding: 2rem;\n\t\t\t\t\tbackground: white;\n\t\t\t\t\tborder-radius: 8px;\n\t\t\t\t\tbox-shadow: 0 2px 8px rgba(0,0,0,0.1);\n\t\t\t\t}\n\t\t\t\tfooter {\n\t\t\t\t\ttext-align: center;\n\t\t\t\t\tpadding: 2rem;\n\t\t\t\t\tcolor: #7f8c8d;\n\t\t\t\t\tmargin-top: 2rem;\n\t\t\t\t}\n\t\t\t</style></head><body><nav><ul><li><a href=\"/\">Home</a></li><li><a href=\"/hello\">Hello</a></li><li><a href=\"/authors\">Authors</a></li><li><a href=\"/health\">Health</a></li></ul></nav><div class=\"container\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " - Goaat</title>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if os.Getenv("ENV") == "development" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<!-- Vite Dev Server --> <script type=\"module\" src=\"http://localhost:5173/@vite/client\"></script> <script type=\"module\" src=\"http://localhost:5173/assets/js/main.js\"></script>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		} else {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<!-- Production Assets --> <link rel=\"stylesheet\" href=\"/css/main.css\"><script type=\"module\" src=\"/js/main.js\"></script>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</head><body><nav><ul><li><a href=\"/\">Home</a></li><li><a href=\"/hello\">Hello</a></li><li><a href=\"/authors\">Authors</a></li><li><a href=\"/health\">Health</a></li></ul></nav><div class=\"container\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -51,7 +68,7 @@ func Layout(title string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div><footer><p>&copy; 2025 Goaat - Built with Echo, Templ & PostgreSQL</p></footer></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</div><footer><p>&copy; 2025 Goaat - Built with Echo, Templ & PostgreSQL</p></footer></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

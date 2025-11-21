@@ -54,7 +54,7 @@ func Hello(name string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "!</h1><p>Welcome to Goaat with Templ</p><p><a href=\"/authors\">See Authors</a></p>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "!</h1><p>Welcome to Goaat</p><sl-button>Button</sl-button><p><a href=\"/authors\">See Authors</a></p><sl-dialog label=\"Dialog\" class=\"dialog-overview\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. <sl-button slot=\"footer\" variant=\"primary\">Close</sl-button></sl-dialog> <sl-button>Open Dialog</sl-button><script>\r\n  const dialog = document.querySelector('.dialog-overview');\r\n  const openButton = dialog.nextElementSibling;\r\n  const closeButton = dialog.querySelector('sl-button[slot=\"footer\"]');\r\n\r\n  openButton.addEventListener('click', () => dialog.show());\r\n  closeButton.addEventListener('click', () => dialog.hide());\r\n</script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -113,7 +113,7 @@ func AuthorList(authors []string) templ.Component {
 				var templ_7745c5c3_Var6 string
 				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(author)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/templates/hello.templ`, Line: 16, Col: 72}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/web/templates/hello.templ`, Line: 36, Col: 72}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 				if templ_7745c5c3_Err != nil {

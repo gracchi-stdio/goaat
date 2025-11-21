@@ -27,11 +27,15 @@ services:
     environment:
       DATABASE_URL: "postgres://user:password@host.containers.internal:5432/goaatDB?sslmode=disable"
       PORT: "8080"
+      ENV: "development"
     ports:
       - "8080:8080"
+      - "5173:5173"
     volumes:
       - .:/app
       - /app/tmp
+      - /app/node_modules
+    command: sh -c "yarn dev & air -c .air.toml"
 
 volumes:
   postgres_data:

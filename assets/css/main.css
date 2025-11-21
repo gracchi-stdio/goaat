@@ -1,0 +1,96 @@
+/* Import Shoelace base styles and theme */
+@import '@shoelace-style/shoelace/dist/themes/light.css' layer(shoelace-light);
+@import '@shoelace-style/shoelace/dist/themes/dark.css' layer(shoelace-dark);
+
+/* Apply Shoelace light theme by default */
+:root,
+.sl-theme-light {
+  color-scheme: light;
+}
+
+/* Apply Shoelace dark theme when class is present */
+.sl-theme-dark {
+  color-scheme: dark;
+}
+
+/* Shoelace Theme Customization using CSS Variables */
+:root {
+  /* Primary color - customize to your brand */
+  --sl-color-primary-50: #f0f9ff;
+  --sl-color-primary-100: #e0f2fe;
+  --sl-color-primary-200: #bae6fd;
+  --sl-color-primary-300: #7dd3fc;
+  --sl-color-primary-400: #38bdf8;
+  --sl-color-primary-500: #0ea5e9;
+  --sl-color-primary-600: #0284c7;
+  --sl-color-primary-700: #0369a1;
+  --sl-color-primary-800: #075985;
+  --sl-color-primary-900: #0c4a6e;
+  --sl-color-primary-950: #082f49;
+
+  /* Typography */
+  --sl-font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --sl-font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+
+  /* Border radius */
+  --sl-border-radius-medium: 0.5rem;
+  --sl-border-radius-large: 0.75rem;
+
+  /* Spacing (can customize if needed) */
+  /* --sl-spacing-x-small: 0.25rem; */
+  /* --sl-spacing-small: 0.5rem; */
+  /* --sl-spacing-medium: 1rem; */
+}
+
+/* Global styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--sl-font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Body inherits colors from Shoelace theme */
+body {
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  min-height: 100vh;
+  font-family: var(--sl-font-sans);
+  line-height: 1.6;
+}
+
+/* Dark theme colors for body */
+html.sl-theme-dark body {
+  background-color: rgb(24, 24, 27);
+  color: rgb(255, 255, 255);
+}
+
+/* Component-specific customizations */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--sl-spacing-large);
+}
+
+/* Custom utility classes */
+.text-center {
+  text-align: center;
+}
+
+.mt-1 { margin-top: var(--sl-spacing-x-small); }
+.mt-2 { margin-top: var(--sl-spacing-small); }
+.mt-3 { margin-top: var(--sl-spacing-medium); }
+.mt-4 { margin-top: var(--sl-spacing-large); }
+.mt-5 { margin-top: var(--sl-spacing-x-large); }
+
+.mb-1 { margin-bottom: var(--sl-spacing-x-small); }
+.mb-2 { margin-bottom: var(--sl-spacing-small); }
+.mb-3 { margin-bottom: var(--sl-spacing-medium); }
+.mb-4 { margin-bottom: var(--sl-spacing-large); }
+.mb-5 { margin-bottom: var(--sl-spacing-x-large); }
