@@ -1,0 +1,23 @@
+# Development Containerfile with Air for hot reload
+FROM docker.io/library/golang:1.25.4-alpine
+
+WORKDIR /app
+
+# Install Air for hot reload and templ for template generation
+RUN go install github.com/air-verse/air@latest && \
+    go install github.com/a-h/templ/cmd/templ@latest
+
+# Copy go mod files
+COPY go.mod go.sum* ./
+RUN go mod download
+
+# Copy source code
+COPY . .
+
+# Generate templ templates
+RUN templ generate
+
+EXPOSE 8080
+
+# Run Air for hot reload
+CMD ["air", "-c", ".air.toml"]

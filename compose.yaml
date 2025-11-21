@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: goaat-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: goaatDB
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d goaatDB"]
+      interval: 2s
+      timeout: 3s
+      retries: 5
+  
+  app:
+    build:
+      context: .
+      dockerfile: Containerfile.dev
+    container_name: goaat-app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgres://user:password@host.containers.internal:5432/goaatDB?sslmode=disable"
+      PORT: "8080"
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+      - /app/tmp
+
+volumes:
+  postgres_data:

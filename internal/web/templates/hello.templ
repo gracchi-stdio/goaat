@@ -1,0 +1,20 @@
+package templates
+
+templ Hello(name string) {
+	@Layout("Hello") {
+		<h1>Hello, { name }!</h1>
+		<p>Welcome to Goaat with Templ</p>
+		<p><a href="/authors">See Authors</a></p>
+	}
+}
+
+templ AuthorList(authors []string) {
+	@Layout("Authors") {
+		<h1>Authors</h1>
+		<ul style="list-style: none; padding: 0;">
+			for _, author := range authors {
+				<li style="padding: 0.5rem; border-bottom: 1px solid #eee;">{ author }</li>
+			}
+		</ul>
+	}
+}
