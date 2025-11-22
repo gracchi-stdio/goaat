@@ -23,6 +23,12 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
     strictPort: true,
+    hmr: {
+      host: 'localhost',
+    },
+    watch: {
+      usePolling: true,
+    },
     proxy: {
       '^/(hello|authors|health|api)': {
         target: 'http://localhost:8080',

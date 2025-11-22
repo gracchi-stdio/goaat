@@ -1,18 +1,24 @@
 package web
 
 import (
-	"github.com/gracchi-stdio/goaat/internal/services"
+	"github.com/gracchi-stdio/goaat/internal/db"
 	"github.com/gracchi-stdio/goaat/internal/web/handlers"
 	"github.com/labstack/echo/v4"
 )
 
 // RegisterRoutes sets up all application routes
-func RegisterRoutes(svc *services.Services, e *echo.Echo) {
+func RegisterRoutes(e *echo.Echo, queries *db.Queries) {
+	// Initialize handlers with dependencies
+	h := handlers.New(queries)
+
 	// Health checks
-	e.GET("/", With(svc, handlers.Health))
-	e.GET("/health", With(svc, handlers.Health))
+	e.GET("/", h.Health)
+	e.GET("/health", h.Health)
 
 	// Templ pages
-	e.GET("/hello", With(svc, handlers.HelloPage))
-	e.GET("/authors", With(svc, handlers.AuthorListPage))
+	e.GET("/hello", h.HelloPage)
+	e.GET("/authors", h.AuthorListPage)
+
+	// API
+	e.GET("/api/authors", h.ListAuthors)
 }

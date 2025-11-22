@@ -8,7 +8,6 @@ import (
 	"github.com/gracchi-stdio/goaat/internal/config"
 	"github.com/gracchi-stdio/goaat/internal/db"
 	"github.com/gracchi-stdio/goaat/internal/middleware"
-	"github.com/gracchi-stdio/goaat/internal/services"
 	"github.com/gracchi-stdio/goaat/internal/web"
 	"github.com/gracchi-stdio/goaat/pkg/logger"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -33,10 +32,8 @@ func main() {
 	// Database connection
 	queries := initDatabase(e, cfg.DatabaseURL)
 
-	svc := services.NewServices(queries)
-
 	// Routes
-	web.RegisterRoutes(svc, e)
+	web.RegisterRoutes(e, queries)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":" + cfg.Port))
