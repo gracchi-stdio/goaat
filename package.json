@@ -11,7 +11,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@shoelace-style/shoelace": "^2.20.1"
+    "@shoelace-style/shoelace": "^2.20.1",
+    "htmx.org": "2.0.8"
   },
   "devDependencies": {
     "postcss": "^8.5.6",

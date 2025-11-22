@@ -1,3 +1,6 @@
+import 'htmx.org';
+window.htmx = import('htmx.org');
+
 // Import Shoelace components (tree-shaken - only import what you use)
 import '@shoelace-style/shoelace/dist/components/button/button.js';
 import '@shoelace-style/shoelace/dist/components/icon/icon.js';
