@@ -13,6 +13,7 @@ templ Layout(title string, class string) {
 			if os.Getenv("ENV") == "development" {
 				<!-- Vite Dev Server -->
 				<script type="module" src="http://localhost:5173/@vite/client"></script>
+				<link rel="stylesheet" href="http://localhost:5173/assets/css/main.css"/>
 				<script type="module" src="http://localhost:5173/assets/js/main.js"></script>
 			} else {
 				<!-- Production Assets -->
@@ -21,8 +22,17 @@ templ Layout(title string, class string) {
 			}
 		
 		</head>
-		<body class={class}>
+		<body class={class} hx-boost="true" hx-swap="innerHTML transition:true">
+			
+			<!-- Persistent Info Example: This element stays alive across page navigations -->
+			<div id="persistent-status" hx-preserve="true" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+				<sl-badge variant="primary" pill>System Online</sl-badge>
+			</div>
+
+			<main class="view-transition">
 				{ children... }
+			</main>
+
 			<footer>
 				<p>&copy; 2025 Goaat - Built with Echo, Templ & PostgreSQL</p>
 			</footer>
@@ -37,7 +47,7 @@ templ AuthedLayout(title string, class string, username string) {
 			<ul>
 				<li><a href="/">Home</a></li>
 				<li><a href="/authors">Authors</a></li>
-				<li style="margin-left: auto;">Welcome, { username } | <a href="/logout">Logout</a></li>
+				<li style="margin-left: auto;">Welcome, { username } | <a href="/logout/github" hx-post="/logout/github" hx-trigger="click">Logout</a></li>
 			</ul>
 		</nav>
 		{ children... }

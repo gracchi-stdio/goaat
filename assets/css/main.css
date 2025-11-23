@@ -43,6 +43,11 @@
   padding: 0;
 }
 
+/* Prevent FOUC for Custom Elements (Shoelace) */
+:not(:defined) {
+  visibility: hidden;
+}
+
 html {
   font-family: var(--sl-font-sans);
   line-height: 1.6;
@@ -88,3 +93,23 @@ html.sl-theme-dark body {
 .mb-3 { margin-bottom: var(--sl-spacing-medium); }
 .mb-4 { margin-bottom: var(--sl-spacing-large); }
 .mb-5 { margin-bottom: var(--sl-spacing-x-large); }
+
+/* View Transitions API Support */
+@view-transition {
+  navigation: auto;
+}
+
+/* Fallback/Custom Animation for browsers without View Transitions or for specific elements */
+.htmx-swapping {
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.htmx-settling {
+  opacity: 1;
+  transition: opacity 0.3s ease-in;
+}
+
+main.view-transition {
+  view-transition-name: main-content;
+}

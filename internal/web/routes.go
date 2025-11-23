@@ -24,8 +24,8 @@ func RegisterRoutes(e *echo.Echo, queries *db.Queries, authService auth.Service)
 	// Auth routes
 	e.GET("/auth/:provider", h.Auth)
 	e.GET("/auth/:provider/callback", h.AuthCallback)
-	e.GET("/logout/:provider", h.Logout)
-	e.GET("/logout", h.Logout)
+	e.POST("/logout/:provider", h.Logout)
+	e.POST("/logout", h.Logout)
 
 	// Authenticated routes
 	authGroup := e.Group("/admin")

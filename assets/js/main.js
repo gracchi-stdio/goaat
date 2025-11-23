@@ -1,5 +1,5 @@
-import 'htmx.org';
-window.htmx = import('htmx.org');
+import htmx from 'htmx.org';
+window.htmx = htmx;
 
 // Import Shoelace components (tree-shaken - only import what you use)
 import '@shoelace-style/shoelace/dist/components/button/button.js';
@@ -16,7 +16,7 @@ setBasePath('/node_modules/@shoelace-style/shoelace/dist');
 // import "./form-group.js";
 
 // Import your CSS
-import '../css/main.css';
+// import '../css/main.css';
 
 // Your custom JavaScript
 console.log('🚀 Goaat app initialized');

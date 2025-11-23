@@ -81,7 +81,15 @@ func (h *Handler) AuthCallback(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to save session")
 	}
 
-	return c.Redirect(http.StatusTemporaryRedirect, "/")
+	// Check for return_to URL
+	returnTo := "/"
+	if url, ok := sess.Values["return_to"].(string); ok && url != "" {
+		returnTo = url
+		delete(sess.Values, "return_to")
+		sess.Save(c.Request(), c.Response())
+	}
+
+	return c.Redirect(http.StatusTemporaryRedirect, returnTo)
 }
 
 // Logout clears the session
@@ -98,5 +106,10 @@ func (h *Handler) Logout(c echo.Context) error {
 	sess.Options.MaxAge = -1
 	sess.Save(c.Request(), c.Response())
 
-	return c.Redirect(http.StatusTemporaryRedirect, "/")
+	if c.Request().Header.Get("HX-Request") == "true" {
+		c.Response().Header().Set("HX-Redirect", "/")
+		return c.NoContent(http.StatusOK)
+	}
+
+	return c.Redirect(http.StatusSeeOther, "/")
 }

@@ -9,7 +9,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "migrate": "tern migrate -m db/migrations --host host.containers.internal",
+    "migrate": "tern migrate -m db/migrations",
     "migrate:new": "tern new -m db/migrations"
   },
   "dependencies": {
