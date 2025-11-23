@@ -15,3 +15,13 @@ type Author struct {
 	CreatedAt pgtype.Timestamp `json:"created_at"`
 	UpdatedAt pgtype.Timestamp `json:"updated_at"`
 }
+
+type User struct {
+	ID        int64            `json:"id"`
+	GithubID  string           `json:"github_id"`
+	Email     string           `json:"email"`
+	Name      string           `json:"name"`
+	AvatarUrl pgtype.Text      `json:"avatar_url"`
+	CreatedAt pgtype.Timestamp `json:"created_at"`
+	UpdatedAt pgtype.Timestamp `json:"updated_at"`
+}

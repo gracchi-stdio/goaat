@@ -26,6 +26,9 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: "postgres://user:password@host.containers.internal:5432/goaatDB?sslmode=disable"
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+      SESSION_SECRET: ${SESSION_SECRET}
       PORT: "8080"
       ENV: "development"
     ports:

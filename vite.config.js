@@ -30,11 +30,8 @@ export default defineConfig({
       usePolling: true,
     },
     proxy: {
-      '^/(hello|authors|health|api)': {
-        target: 'http://localhost:8080',
-        changeOrigin: true
-      },
-      '^/$': {
+      // Proxy any path that doesn't contain a dot (likely a route) and isn't a Vite internal (@)
+      '^/(?!@)([^.]*)$': {
         target: 'http://localhost:8080',
         changeOrigin: true
       }

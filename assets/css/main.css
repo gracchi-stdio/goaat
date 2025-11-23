@@ -2,6 +2,10 @@
 @import '@shoelace-style/shoelace/dist/themes/light.css' layer(shoelace-light);
 @import '@shoelace-style/shoelace/dist/themes/dark.css' layer(shoelace-dark);
 
+@import 'variables.css';
+/* Import Page Styles */
+@import 'pages/login.css';
+
 /* Apply Shoelace light theme by default */
 :root,
 .sl-theme-light {

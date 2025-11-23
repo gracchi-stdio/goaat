@@ -1,0 +1,19 @@
+package templates
+
+templ Login() {
+	@Layout("Login", "page-login") {
+		<sl-card class="login-card">
+			<div slot="header">
+				<h3>Welcome to Goaat</h3>
+			</div>
+			<div class="login-content">
+				<p>Sign in to manage your content</p>
+				
+				<sl-button href="/auth/github" variant="default" outline>
+					<sl-icon slot="prefix" name="github"></sl-icon>
+					Login with GitHub
+				</sl-button>
+			</div>
+		</sl-card>
+	}
+}

@@ -4,49 +4,60 @@
 This is a Go project enabling the users to edit markdowns with frontmatter service using **Echo v4** framework with **Templ** templates and **PostgreSQL** via **pgx/v5**. The project uses **SQLC** for type-safe database queries and runs in **Podman 5** containers.
 
 **Module**: `github.com/gracchi-stdio/goaat`  
-**Entry Point**: `cmd/server/main.go` (for now I have only one server serving web with Templ, API server planned later)
+**Entry Point**: `cmd/server/main.go`
 
 ## Container Environment (Podman 5)
 
 ### Critical: Database Connection
-- Podman 5 has working DNS, so use container hostname: `goaat-db:5432`
-- Database URL: `postgres://user:password@goaat-db:5432/goaatDB?sslmode=disable`
-- Always set 5s timeout on `pgx.Connect()` - fails gracefully if DB unavailable
-- DB connection pattern in `main.go` lines 60-73: timeout context, warning on failure, continues without DB
-
+- **App to DB**: Uses `host.containers.internal` in `DATABASE_URL` for Podman networking.
+- **Migrations**: Run via `tern` inside the app container.
+- **Command**: `podman exec -it goaat-app yarn migrate` (uses `host.containers.internal`).
 
 ## Web Framework (Echo v4)
 
-### Custom Colorful Logger
-Uses ANSI colors in request logs (lines 21-50 in `main.go`):
-- **Cyan** methods
-- **Green** 2xx status
-- **Yellow** 4xx status  
-- **Red** 5xx status
-- Format: `METHOD | STATUS | LATENCY | IP | URI`
+### Authentication (OAuth)
+- **Service Pattern**: `internal/auth/service.go` defines the interface.
+- **Implementation**: `internal/auth/auth.go` uses **Goth** (GitHub provider).
+- **Session**: **Gorilla Sessions** (Cookie-based) via `echo-contrib`.
+- **User Storage**: Users are upserted into `users` table on login.
 
-### Middleware Order
-1. Custom RequestLogger (with colors)
-2. Recover (panic recovery)
-
-### Environment Variables
-- `DATABASE_URL` - PostgreSQL connection string
-- `PORT` - Server port (default: 8080)
-
-## Project Structure (Current)
+### Project Structure
 ```
-cmd/server/main.go          # Entry point
+cmd/server/main.go          # Entry point (wires Service -> Handlers)
 internal/
-  db/                       # SQLC generated code
-  web/                      # Web layer (in progress)
-    handlers/               # HTTP handlers
+  auth/                     # Auth Service & Goth implementation
+  platform/
+    db/                     # SQLC generated code
+    logger/                 # Custom colorful logger
+  web/
+    handlers/               # HTTP handlers (injected with AuthService)
     templates/              # Templ files (*.templ)
-    routes.go              # Route definitions
+    routes.go               # Route definitions
+db/
+  migrations/               # SQL migrations (Tern)
+  queries/                  # SQLC queries
 compose.yaml                # Podman compose setup
-schema.sql                  # DB schema
-query.sql                   # SQLC queries
-sqlc.yaml                   # SQLC config
+tern.conf                   # Migration config
 ```
+
+## Key Workflows
+
+### Database Migrations
+- **Tool**: `tern` (installed in dev container).
+- **Run**: `podman exec -it goaat-app yarn migrate`
+- **Create New**: `podman exec -it goaat-app yarn migrate:new -n name_of_migration`
+
+### CSS & UI
+- **Framework**: **Shoelace** (Web Components) + Custom CSS.
+- **Structure**:
+  - `assets/css/main.css`: Entry point.
+  - `assets/css/pages/`: Page-specific styles.
+  - `variables.css`: Global design tokens.
+- **Templ Layout**: Accepts `class` param for body styling (e.g., `@Layout("Title", "page-login")`).
+
+### Development
+- **Hot Reload**: `air` runs automatically in the container.
+- **Templ Generation**: `air` triggers `templ generate` on file save.
 
 ## Planned Migration
 Moving to cleaner structure with:
@@ -82,3 +93,4 @@ Moving to cleaner structure with:
 - Use `podman-compose` not `podman compose` (installed via `uv tool install podman-compose`)
 - Module name is `goaat` but folder is still `goauth` (will rename)
 - Empty dirs exist for future features: `config/`, `services/`, `middleware/`
+- explain the plan before writing code after confirming with me

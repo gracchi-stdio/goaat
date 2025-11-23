@@ -13,8 +13,11 @@ type Querier interface {
 	DeleteAuthor(ctx context.Context, id int64) error
 	GetAuthorByEmail(ctx context.Context, email string) (Author, error)
 	GetAuthorByID(ctx context.Context, id int64) (Author, error)
+	GetUser(ctx context.Context, id int64) (User, error)
+	GetUserByGithubID(ctx context.Context, githubID string) (User, error)
 	ListAuthors(ctx context.Context) ([]Author, error)
 	UpdateAuthor(ctx context.Context, arg UpdateAuthorParams) error
+	UpsertUser(ctx context.Context, arg UpsertUserParams) (User, error)
 }
 
 var _ Querier = (*Queries)(nil)

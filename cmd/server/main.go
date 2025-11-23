@@ -5,12 +5,15 @@ import (
 	"os"
 	"time"
 
+	"github.com/gorilla/sessions"
+	"github.com/gracchi-stdio/goaat/internal/auth"
 	"github.com/gracchi-stdio/goaat/internal/config"
-	"github.com/gracchi-stdio/goaat/internal/db"
 	"github.com/gracchi-stdio/goaat/internal/middleware"
+	"github.com/gracchi-stdio/goaat/internal/platform/db"
+	"github.com/gracchi-stdio/goaat/internal/platform/logger"
 	"github.com/gracchi-stdio/goaat/internal/web"
-	"github.com/gracchi-stdio/goaat/pkg/logger"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	echomiddleware "github.com/labstack/echo/v4/middleware"
 )
@@ -18,6 +21,17 @@ import (
 func main() {
 	// Load configuration
 	cfg := config.Load()
+
+	// Initialize Auth
+	if err := auth.Init(cfg); err != nil {
+		// Log warning but don't fail if auth is not configured in dev
+		if cfg.Environment == "production" {
+			panic(err)
+		}
+		// In dev, we might proceed without auth or log it
+		// For now, let's just print it
+		// fmt.Println("Auth init failed:", err)
+	}
 
 	// Initialize Echo
 	e := echo.New()
@@ -29,11 +43,21 @@ func main() {
 	e.Use(echomiddleware.Recover())
 	e.Use(echomiddleware.Static("public"))
 
+	// Session Middleware
+	if cfg.SessionSecret != "" {
+		e.Use(session.Middleware(sessions.NewCookieStore([]byte(cfg.SessionSecret))))
+	} else {
+		e.Logger.Warn("SESSION_SECRET not set, session middleware disabled")
+	}
+
 	// Database connection
 	queries := initDatabase(e, cfg.DatabaseURL)
 
+	// Initialize Auth Service
+	authService := auth.NewService()
+
 	// Routes
-	web.RegisterRoutes(e, queries)
+	web.RegisterRoutes(e, queries, authService)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":" + cfg.Port))

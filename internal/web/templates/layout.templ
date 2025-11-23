@@ -3,7 +3,7 @@ package templates
 import "os"
 
 // Base layout component that wraps all pages
-templ Layout(title string) {
+templ Layout(title string, class string) {
 	<!DOCTYPE html>
 	<html lang="en" class="sl-theme-dark">
 		<head>
@@ -21,18 +21,8 @@ templ Layout(title string) {
 			}
 		
 		</head>
-		<body>
-			<nav>
-				<ul>
-					<li><a href="/">Home</a></li>
-					<li><a href="/hello">Hello</a></li>
-					<li><a href="/authors">Authors</a></li>
-					<li><a href="/health">Health</a></li>
-				</ul>
-			</nav>
-			<div class="container">
+		<body class={class}>
 				{ children... }
-			</div>
 			<footer>
 				<p>&copy; 2025 Goaat - Built with Echo, Templ & PostgreSQL</p>
 			</footer>
