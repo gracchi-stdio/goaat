@@ -1,7 +1,9 @@
-package templates
+package pages
+
+import "github.com/gracchi-stdio/goaat/internal/web/templates/layouts"
 
 templ Hello(name string) {
-	@Layout("Hello", "") {
+	@layouts.Layout("Hello", "") {
 		<h1>Hello, { name }!</h1>
 		<p>Welcome to Goaat</p>
 		<sl-button>Button</sl-button>
@@ -12,18 +14,18 @@ templ Hello(name string) {
 		</sl-dialog>
 		<sl-button>Open Dialog</sl-button>
 		<script>
-  const dialog = document.querySelector('.dialog-overview');
-  const openButton = dialog.nextElementSibling;
-  const closeButton = dialog.querySelector('sl-button[slot="footer"]');
+			const dialog = document.querySelector('.dialog-overview');
+			const openButton = dialog.nextElementSibling;
+			const closeButton = dialog.querySelector('sl-button[slot="footer"]');
 
-  openButton.addEventListener('click', () => dialog.show());
-  closeButton.addEventListener('click', () => dialog.hide());
-</script>
+			openButton.addEventListener('click', () => dialog.show());
+			closeButton.addEventListener('click', () => dialog.hide());
+		</script>
 	}
 }
 
 templ AuthorList(authors []string) {
-	@Layout("Authors", "") {
+	@layouts.AuthedLayout("Authors", "", "User") {
 		<h1>Authors</h1>
 		<ul style="list-style: none; padding: 0;">
 			for _, author := range authors {

@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/gracchi-stdio/goaat/internal/web/templates"
+	"github.com/gracchi-stdio/goaat/internal/web/templates/pages"
 	"github.com/labstack/echo/v4"
 )
 
@@ -11,7 +11,7 @@ func (h *Handler) HelloPage(c echo.Context) error {
 		name = "World"
 	}
 
-	component := templates.Hello(name)
+	component := pages.Hello(name)
 	return component.Render(c.Request().Context(), c.Response().Writer)
 }
 
@@ -19,6 +19,6 @@ func (h *Handler) AuthorListPage(c echo.Context) error {
 	// Mock data for now - will use real service later
 	authors := []string{"Alice", "Bob", "Charlie"}
 
-	component := templates.AuthorList(authors)
+	component := pages.AuthorList(authors)
 	return component.Render(c.Request().Context(), c.Response().Writer)
 }

@@ -1,7 +1,9 @@
-package templates
+package pages
+
+import "github.com/gracchi-stdio/goaat/internal/web/templates/layouts"
 
 templ Login() {
-	@Layout("Login", "page-login") {
+	@layouts.Layout("Login", "page-login") {
 		<sl-card class="login-card">
 			<div slot="header">
 				<h3>Welcome to Goaat</h3>
