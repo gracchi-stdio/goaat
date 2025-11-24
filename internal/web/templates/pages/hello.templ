@@ -1,6 +1,9 @@
 package pages
 
-import "github.com/gracchi-stdio/goaat/internal/web/templates/layouts"
+import (
+	"github.com/gracchi-stdio/goaat/internal/auth"
+	"github.com/gracchi-stdio/goaat/internal/web/templates/layouts"
+)
 
 templ Hello(name string) {
 	@layouts.Layout("Hello", "") {
@@ -25,7 +28,7 @@ templ Hello(name string) {
 }
 
 templ AuthorList(authors []string) {
-	@layouts.AuthedLayout("Authors", "", "User") {
+	@layouts.AuthedLayout("Authors", "") {
 		<h1>Authors</h1>
 		<ul style="list-style: none; padding: 0;">
 			for _, author := range authors {

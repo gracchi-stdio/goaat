@@ -4,10 +4,9 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/gorilla/sessions"
+	"github.com/gracchi-stdio/goaat/internal/auth"
 	"github.com/gracchi-stdio/goaat/internal/platform/db"
 	"github.com/jackc/pgx/v5/pgtype"
-	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/markbates/goth/gothic"
 )
@@ -65,28 +64,23 @@ func (h *Handler) AuthCallback(c echo.Context) error {
 	}
 
 	// Create a session for the user
-	sess, _ := session.Get("session", c)
-	sess.Options = &sessions.Options{
-		Path:     "/",
-		MaxAge:   86400 * 7,
-		HttpOnly: true,
-	}
-	sess.Values["user_id"] = dbUser.ID
-	sess.Values["email"] = dbUser.Email
-	sess.Values["name"] = dbUser.Name
+	s := auth.GetSession(c)
+	s.UserID = dbUser.ID
+	s.Email = dbUser.Email
+	s.Name = dbUser.Name
 	if dbUser.AvatarUrl.Valid {
-		sess.Values["avatar_url"] = dbUser.AvatarUrl.String
-	}
-	if err := sess.Save(c.Request(), c.Response()); err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to save session")
+		s.AvatarURL = dbUser.AvatarUrl.String
 	}
 
 	// Check for return_to URL
 	returnTo := "/"
-	if url, ok := sess.Values["return_to"].(string); ok && url != "" {
-		returnTo = url
-		delete(sess.Values, "return_to")
-		sess.Save(c.Request(), c.Response())
+	if s.ReturnTo != "" {
+		returnTo = s.ReturnTo
+		s.ReturnTo = "" // Clear it
+	}
+
+	if err := auth.SaveSession(c, s); err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to save session")
 	}
 
 	return c.Redirect(http.StatusTemporaryRedirect, returnTo)
@@ -102,9 +96,7 @@ func (h *Handler) Logout(c echo.Context) error {
 		h.AuthService.Logout(c.Response(), c.Request())
 	}
 
-	sess, _ := session.Get("session", c)
-	sess.Options.MaxAge = -1
-	sess.Save(c.Request(), c.Response())
+	auth.ClearSession(c)
 
 	if c.Request().Header.Get("HX-Request") == "true" {
 		c.Response().Header().Set("HX-Redirect", "/")

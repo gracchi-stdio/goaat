@@ -1,22 +1,31 @@
 package middleware
 
 import (
+	"context"
 	"net/http"
 
-	"github.com/labstack/echo-contrib/session"
+	"github.com/gracchi-stdio/goaat/internal/auth"
 	"github.com/labstack/echo/v4"
 )
 
 // RequireAuth checks if the user is logged in
 func RequireAuth(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		sess, _ := session.Get("session", c)
-		if sess.Values["user_id"] == nil {
+		userSession := auth.GetSession(c)
+		if !userSession.IsAuthenticated() {
+			// Log the unauthorized access attempt using the custom logger
+			c.Logger().Warnf("Unauthorized access attempt to: %s", c.Request().URL.String())
+
 			// Save the current URL to redirect back after login
-			sess.Values["return_to"] = c.Request().URL.String()
-			sess.Save(c.Request(), c.Response())
+			auth.SetReturnTo(c, c.Request().URL.String())
 			return c.Redirect(http.StatusTemporaryRedirect, "/login")
 		}
+		c.Logger().Infof("Authenticated access by user: %s", userSession.Name)
+
+		// Inject user into context for templates
+		ctx := context.WithValue(c.Request().Context(), auth.UserContextKey, userSession)
+		c.SetRequest(c.Request().WithContext(ctx))
+
 		return next(c)
 	}
 }
