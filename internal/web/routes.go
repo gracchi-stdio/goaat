@@ -14,7 +14,7 @@ func RegisterRoutes(e *echo.Echo, queries *db.Queries, authService auth.Service)
 	h := handlers.New(queries, authService)
 
 	// Health checks
-	e.GET("/", h.Health)
+	e.GET("/", h.HelloPage)
 	e.GET("/health", h.Health)
 
 	// Templ pages

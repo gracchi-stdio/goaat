@@ -31,6 +31,7 @@ services:
       SESSION_SECRET: ${SESSION_SECRET}
       PORT: "8080"
       ENV: "development"
+      BASE_URL: ${BASE_URL:-http://localhost:5173}
     ports:
       - "8080:8080"
       - "5173:5173"

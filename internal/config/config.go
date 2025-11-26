@@ -10,7 +10,7 @@ type Config struct {
 	DatabaseURL        string
 	Port               string
 	Environment        string // "development" or "production"
-	BaseURL            string // Base URL for callbacks (e.g., "http://localhost:8080")
+	BaseURL            string // Base URL for OAuth callbacks (e.g., "http://localhost:5173")
 	GithubClientID     string
 	GithubClientSecret string
 	SessionSecret      string

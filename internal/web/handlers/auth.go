@@ -98,9 +98,11 @@ func (h *Handler) Logout(c echo.Context) error {
 
 	auth.ClearSession(c)
 
-	if c.Request().Header.Get("HX-Request") == "true" {
-		c.Response().Header().Set("HX-Redirect", "/")
-		return c.NoContent(http.StatusOK)
+	// Check if this is a Datastar request (SSE) - Datastar sends Accept: text/event-stream
+	accept := c.Request().Header.Get("Accept")
+	if accept == "text/event-stream" || c.Request().Header.Get("Datastar-Request") != "" {
+		sse := SSE(c)
+		return sse.Redirect("/")
 	}
 
 	return c.Redirect(http.StatusSeeOther, "/")

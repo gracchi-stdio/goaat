@@ -12,6 +12,8 @@ templ Layout(title string, class string) {
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<!-- Enable cross-document view transitions (Chrome 126+) -->
+			<meta name="view-transition" content="same-origin"/>
 			<title>{ title } - Goaat</title>
 			if os.Getenv("ENV") == "development" {
 				<!-- Vite Dev Server -->
@@ -23,12 +25,11 @@ templ Layout(title string, class string) {
 				<link rel="stylesheet" href="/css/main.css"/>
 				<script type="module" src="/js/main.js"></script>
 			}
-		
 		</head>
-		<body class={class} hx-boost="true" hx-swap="innerHTML transition:true">
+		<body class={ class }>
 			
-			<!-- Persistent Info Example: This element stays alive across page navigations -->
-			<div id="persistent-status" hx-preserve="true" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+			<!-- Persistent Status Badge -->
+			<div id="persistent-status" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
 				<sl-badge variant="primary" pill>System Online</sl-badge>
 			</div>
 
@@ -48,8 +49,10 @@ templ AuthedLayout(title string, class string) {
 		<nav>
 			<ul>
 				<li><a href="/">Home</a></li>
-				<li><a href="/authors">Authors</a></li>
-				<li style="margin-left: auto;">Welcome, { auth.GetUserFromContext(ctx).Name } | <a href="/logout/github" hx-post="/logout/github" hx-trigger="click">Logout</a></li>
+				<li><a href="/admin/authors">Authors</a></li>
+				<li style="margin-left: auto;">Welcome, { auth.GetUserFromContext(ctx).Name } | <button data-on:click="@post('/logout/github')" style="background: none; border: none; color: inherit; cursor: pointer; text-decoration: underline;">Logout
+		<span data-show="$_loading">Loading...</span>		
+				</button></li>
 			</ul>
 		</nav>
 		{ children... }

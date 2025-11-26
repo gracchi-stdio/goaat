@@ -94,20 +94,47 @@ html.sl-theme-dark body {
 .mb-4 { margin-bottom: var(--sl-spacing-large); }
 .mb-5 { margin-bottom: var(--sl-spacing-x-large); }
 
-/* View Transitions API Support */
+/* View Transitions API Support for cross-document navigation */
 @view-transition {
   navigation: auto;
 }
 
-/* Fallback/Custom Animation for browsers without View Transitions or for specific elements */
-.htmx-swapping {
-  opacity: 0;
-  transition: opacity 0.3s ease-out;
+/* Smooth page transitions */
+::view-transition-old(main-content) {
+  animation: fade-out 0.15s ease-out forwards;
 }
 
-.htmx-settling {
-  opacity: 1;
-  transition: opacity 0.3s ease-in;
+::view-transition-new(main-content) {
+  animation: fade-in 0.15s ease-in forwards;
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Slide transitions for navigation */
+::view-transition-old(root) {
+  animation: slide-out 0.25s ease-out;
+}
+
+::view-transition-new(root) {
+  animation: slide-in 0.25s ease-in;
+}
+
+@keyframes slide-out {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(-10px); }
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateX(10px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 main.view-transition {

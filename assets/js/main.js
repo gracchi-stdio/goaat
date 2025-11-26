@@ -1,5 +1,5 @@
-import htmx from 'htmx.org';
-window.htmx = htmx;
+// Datastar - Hypermedia Framework
+import 'https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js'
 
 // Import Shoelace components (tree-shaken - only import what you use)
 import '@shoelace-style/shoelace/dist/components/button/button.js';
