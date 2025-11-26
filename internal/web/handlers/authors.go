@@ -7,9 +7,13 @@ import (
 )
 
 func (h *Handler) ListAuthors(c echo.Context) error {
+	if h.DB == nil {
+		return echo.NewHTTPError(http.StatusServiceUnavailable, "database unavailable")
+	}
+
 	authors, err := h.DB.ListAuthors(c.Request().Context())
 	if err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusInternalServerError, "failed to fetch authors")
 	}
 	return c.JSON(http.StatusOK, authors)
 }

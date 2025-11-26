@@ -2,7 +2,10 @@ package main
 
 import (
 	"context"
+	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/gorilla/sessions"
@@ -28,9 +31,6 @@ func main() {
 		if cfg.Environment == "production" {
 			panic(err)
 		}
-		// In dev, we might proceed without auth or log it
-		// For now, let's just print it
-		// fmt.Println("Auth init failed:", err)
 	}
 
 	// Initialize Echo
@@ -51,7 +51,7 @@ func main() {
 	}
 
 	// Database connection
-	queries := initDatabase(e, cfg.DatabaseURL)
+	pool, queries := initDatabase(e, cfg.DatabaseURL)
 
 	// Initialize Auth Service
 	authService := auth.NewService()
@@ -59,14 +59,42 @@ func main() {
 	// Routes
 	web.RegisterRoutes(e, queries, authService)
 
+	// Graceful shutdown
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
 	// Start server
-	e.Logger.Fatal(e.Start(":" + cfg.Port))
+	go func() {
+		if err := e.Start(":" + cfg.Port); err != nil && err != http.ErrServerClosed {
+			e.Logger.Fatal("shutting down the server")
+		}
+	}()
+
+	// Wait for interrupt signal
+	<-ctx.Done()
+	e.Logger.Info("Shutting down gracefully...")
+
+	// Shutdown with timeout
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	if err := e.Shutdown(shutdownCtx); err != nil {
+		e.Logger.Fatal(err)
+	}
+
+	// Close database pool
+	if pool != nil {
+		pool.Close()
+		e.Logger.Info("Database connection closed")
+	}
+
+	e.Logger.Info("Server stopped")
 }
 
-func initDatabase(e *echo.Echo, dbURL string) *db.Queries {
+func initDatabase(e *echo.Echo, dbURL string) (*pgxpool.Pool, *db.Queries) {
 	if dbURL == "" {
 		e.Logger.Warn("DATABASE_URL not set, skipping database connection")
-		return nil
+		return nil, nil
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -77,15 +105,15 @@ func initDatabase(e *echo.Echo, dbURL string) *db.Queries {
 	if err != nil {
 		e.Logger.Warn("Database connection failed:", err)
 		e.Logger.Info("Starting server without database connection")
-		return nil
+		return nil, nil
 	}
 
 	// Ping to verify connection
 	if err := pool.Ping(ctx); err != nil {
 		e.Logger.Warn("Database ping failed:", err)
-		return nil
+		return nil, nil
 	}
 
 	e.Logger.Info("Successfully connected to database")
-	return db.New(pool)
+	return pool, db.New(pool)
 }

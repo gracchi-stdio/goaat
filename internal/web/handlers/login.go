@@ -5,7 +5,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// LoginPage renders the login page with OAuth options.
 func (h *Handler) LoginPage(c echo.Context) error {
-	component := pages.Login()
-	return component.Render(c.Request().Context(), c.Response().Writer)
+	return Render(c, pages.Login())
 }

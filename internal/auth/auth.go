@@ -10,7 +10,8 @@ import (
 	"github.com/markbates/goth/providers/github"
 )
 
-// Init initializes the authentication providers
+// Init initializes the authentication providers.
+// Returns an error if required environment variables are missing.
 func Init(cfg *config.Config) error {
 	if cfg.GithubClientID == "" || cfg.GithubClientSecret == "" {
 		return fmt.Errorf("GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET must be set")
@@ -24,11 +25,7 @@ func Init(cfg *config.Config) error {
 	store := sessions.NewCookieStore([]byte(cfg.SessionSecret))
 	gothic.Store = store
 
-	callbackURL := fmt.Sprintf("http://localhost:%s/auth/github/callback", cfg.Port)
-	if cfg.Environment == "production" {
-		// TODO: Set proper production callback URL
-		callbackURL = "https://your-domain.com/auth/github/callback"
-	}
+	callbackURL := cfg.BaseURL + "/auth/github/callback"
 
 	goth.UseProviders(
 		github.New(cfg.GithubClientID, cfg.GithubClientSecret, callbackURL),
