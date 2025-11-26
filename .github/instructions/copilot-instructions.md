@@ -167,15 +167,35 @@ curl http://localhost:8080/api/authors
 2. Goth redirects to GitHub OAuth
 3. Callback → `/auth/github/callback`
 4. User upserted to `users` table
-5. Session created with `user_id`, `email`, `name`
+5. Typed `UserSession` saved via `auth.SaveSession()`
 6. Redirect to `return_to` URL or `/`
 
-### Session Keys
-- `user_id`: Database user ID
-- `email`: User email
-- `name`: Display name
-- `avatar_url`: GitHub avatar
-- `return_to`: Redirect after login
+### Session Management (`internal/auth/session.go`)
+The session is managed via a typed `UserSession` struct:
+
+```go
+type UserSession struct {
+    UserID    int64
+    Email     string
+    Name      string
+    AvatarURL string
+    ReturnTo  string
+}
+
+// Usage in handlers:
+s := auth.GetSession(c)           // Get current session
+s.IsAuthenticated()               // Check if logged in
+auth.SaveSession(c, s)            // Save session
+auth.ClearSession(c)              // Logout
+auth.SetReturnTo(c, url)          // Save redirect URL
+
+// Usage in templates (via context):
+auth.GetUserFromContext(ctx).Name // Access user in templ
+```
+
+### Middleware
+- `RequireAuth`: Checks `IsAuthenticated()`, injects user into context
+- User available in templates via `auth.GetUserFromContext(ctx)`
 
 ## Key Dependencies
 | Package | Purpose |
