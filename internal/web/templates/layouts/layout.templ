@@ -12,8 +12,6 @@ templ Layout(title string, class string) {
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<!-- Enable cross-document view transitions (Chrome 126+) -->
-			<meta name="view-transition" content="same-origin"/>
 			<title>{ title } - Goaat</title>
 			if os.Getenv("ENV") == "development" {
 				<!-- Vite Dev Server -->
@@ -26,7 +24,7 @@ templ Layout(title string, class string) {
 				<script type="module" src="/js/main.js"></script>
 			}
 		</head>
-		<body class={ class } data-store="{alerts: [], viewTransition: true}">
+        <body class={ class }>
 			<!-- Persistent Alerts Container (Top Right) -->
 			<div id="alert-container" 
 				style="position: fixed; top: var(--sl-spacing-large); right: var(--sl-spacing-large); z-index: var(--sl-z-index-toast); display: flex; flex-direction: column; gap: var(--sl-spacing-small); max-width: 400px;">
@@ -43,7 +41,7 @@ templ Layout(title string, class string) {
 
 // PageContentWrapper wraps the content in the main tag, used by Datastar handlers
 templ PageContentWrapper(content templ.Component) {
-	<main id="page-content" class="app-content view-transition" data-transition-name="page-content">
+	<main id="page-content" class="app-content">
 		@content
 	</main>
 }
@@ -61,26 +59,26 @@ templ AuthedLayout(title string, class string) {
 
 				<!-- Navigation Menu with Datastar -->
 				<nav class="sidebar-nav">
-					<a href="/admin/dashboard" 
-						data-on-click__prevent="$$get('/admin/dashboard')">
+					<button type="button"
+						data-on:click__viewtransition="@get('/admin/dashboard')">
 						<sl-icon name="grid" library="default"></sl-icon>
 						<span>Dashboard</span>
-					</a>
-					<a href="/admin/repositories" 
-						data-on-click__prevent="$$get('/admin/repositories')">
+					</button>
+					<button type="button"
+						data-on:click__viewtransition="@get('/admin/repositories')">
 						<sl-icon name="folder" library="default"></sl-icon>
 						<span>Repositories</span>
-					</a>
-					<a href="/admin/authors" 
-						data-on-click__prevent="$$get('/admin/authors')">
+					</button>
+					<button type="button"
+						data-on:click__viewtransition="@get('/admin/authors')">
 						<sl-icon name="people" library="default"></sl-icon>
 						<span>Authors</span>
-					</a>
-					<a href="/admin/settings" 
-						data-on-click__prevent="$$get('/admin/settings')">
+					</button>
+					<button type="button"
+						data-on:click__viewtransition="@get('/admin/settings')">
 						<sl-icon name="gear" library="default"></sl-icon>
 						<span>Settings</span>
-					</a>
+					</button>
 				</nav>
 
 				<!-- User Menu Footer -->
@@ -103,12 +101,12 @@ templ AuthedLayout(title string, class string) {
 						</sl-button>
 						<sl-menu>
 							<sl-menu-item 
-								data-on-click="$$get('/admin/profile')">
+								data-on:click__viewtransition="@get('/admin/profile')">
 								<sl-icon slot="prefix" name="person"></sl-icon>
 								Profile
 							</sl-menu-item>
 							<sl-menu-item 
-								data-on-click="$$get('/admin/settings')">
+								data-on:click__viewtransition="@get('/admin/settings')">
 								<sl-icon slot="prefix" name="gear"></sl-icon>
 								Settings
 							</sl-menu-item>
@@ -134,9 +132,11 @@ templ AuthedLayout(title string, class string) {
 						<sl-icon name="list" library="default"></sl-icon>
 					</sl-button>
 					<sl-breadcrumb>
-						<sl-breadcrumb-item href="/admin/dashboard" data-on-click__prevent="$$get('/admin/dashboard')">
-							<sl-icon slot="prefix" name="house"></sl-icon>
-							Dashboard
+						<sl-breadcrumb-item>
+							<button type="button" data-on:click__viewtransition="@get('/admin/dashboard')" style="all: unset; cursor: pointer; display: flex; align-items: center; gap: var(--sl-spacing-x-small);">
+								<sl-icon name="house"></sl-icon>
+								Dashboard
+							</button>
 						</sl-breadcrumb-item>
 						if title != "Dashboard" {
 							<sl-breadcrumb-item>{ title }</sl-breadcrumb-item>
@@ -145,7 +145,7 @@ templ AuthedLayout(title string, class string) {
 				</header>
 
 				<!-- Page Content -->
-				<main id="page-content" class="app-content view-transition" data-transition-name="page-content">
+				<main id="page-content" class="app-content">
 					{ children... }
 				</main>
 			</div>
