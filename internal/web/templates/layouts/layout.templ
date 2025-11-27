@@ -48,7 +48,7 @@ templ PageContentWrapper(content templ.Component) {
 
 templ AuthedLayout(title string, class string) {
 	@Layout(title, "authed-layout " + class) {
-		<div class="app-container">
+		<div class="app-container" data-signals={ "{currentPath: window.location.pathname, currentTitle: '" + title + "'}" }>
 			<!-- Sidebar Drawer -->
 			<aside class="app-drawer" id="app-drawer">
 				<!-- Logo Header -->
@@ -60,22 +60,26 @@ templ AuthedLayout(title string, class string) {
 				<!-- Navigation Menu with Datastar -->
 				<nav class="sidebar-nav">
 					<button type="button"
-						data-on:click__viewtransition="@get('/admin/dashboard'); history.pushState(null, '', '/admin/dashboard')">
+						data-attr:aria-current="$currentPath === '/admin/dashboard' ? 'page' : null"
+						data-on:click__prevent="$currentPath = '/admin/dashboard'; $currentTitle = 'Dashboard'; history.pushState(null, '', '/admin/dashboard'); @get('/admin/dashboard')">
 						<sl-icon name="grid" library="default"></sl-icon>
 						<span>Dashboard</span>
 					</button>
 					<button type="button"
-						data-on:click__viewtransition="@get('/admin/repositories'); history.pushState(null, '', '/admin/repositories')">
+						data-attr:aria-current="$currentPath === '/admin/repositories' ? 'page' : null"
+						data-on:click__prevent="$currentPath = '/admin/repositories'; $currentTitle = 'Repositories'; history.pushState(null, '', '/admin/repositories'); @get('/admin/repositories')">
 						<sl-icon name="folder" library="default"></sl-icon>
 						<span>Repositories</span>
 					</button>
 					<button type="button"
-						data-on:click__viewtransition="@get('/admin/authors'); history.pushState(null, '', '/admin/authors')">
+						data-attr:aria-current="$currentPath === '/admin/authors' ? 'page' : null"
+						data-on:click__prevent="$currentPath = '/admin/authors'; $currentTitle = 'Authors'; history.pushState(null, '', '/admin/authors'); @get('/admin/authors')">
 						<sl-icon name="people" library="default"></sl-icon>
 						<span>Authors</span>
 					</button>
 					<button type="button"
-						data-on:click__viewtransition="@get('/admin/settings'); history.pushState(null, '', '/admin/settings')">
+						data-attr:aria-current="$currentPath === '/admin/settings' ? 'page' : null"
+						data-on:click__prevent="$currentPath = '/admin/settings'; $currentTitle = 'Settings'; history.pushState(null, '', '/admin/settings'); @get('/admin/settings')">
 						<sl-icon name="gear" library="default"></sl-icon>
 						<span>Settings</span>
 					</button>
@@ -133,14 +137,16 @@ templ AuthedLayout(title string, class string) {
 					</sl-button>
 					<sl-breadcrumb>
 						<sl-breadcrumb-item>
-							<button type="button" data-on:click__viewtransition="@get('/admin/dashboard'); history.pushState(null, '', '/admin/dashboard')" style="all: unset; cursor: pointer; display: flex; align-items: center; gap: var(--sl-spacing-x-small);">
+							<span 
+								data-on:click="$currentPath = '/admin/dashboard'; $currentTitle = 'Dashboard'; history.pushState(null, '', '/admin/dashboard'); @get('/admin/dashboard')" 
+								style="cursor: pointer; display: flex; align-items: center; gap: var(--sl-spacing-x-small);">
 								<sl-icon name="house"></sl-icon>
 								Dashboard
-							</button>
+							</span>
 						</sl-breadcrumb-item>
-						if title != "Dashboard" {
-							<sl-breadcrumb-item>{ title }</sl-breadcrumb-item>
-						}
+						<sl-breadcrumb-item data-show="$currentTitle !== 'Dashboard'">
+							<span data-text="$currentTitle"></span>
+						</sl-breadcrumb-item>
 					</sl-breadcrumb>
 				</header>
 

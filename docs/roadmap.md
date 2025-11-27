@@ -40,17 +40,17 @@ Each task teaches a Go/Templ concept:
 
 | Task | You'll Learn |
 |------|--------------|
-| 1B.1 Layout | Templ components, HTMX boost, View Transitions |
-| 1B.2 Navigation | Conditional rendering (`if`), auth context |
+| 1B.1 Layout | Templ components, Datastar signals, View Transitions |
+| 1B.2 Navigation | Datastar `@get`, `data-attr`, soft navigation |
 | 1B.3 Home page | Creating a new page, route registration |
 | 1B.4 Dashboard | Authenticated routes, middleware |
 | 1B.5 Profile | Reading from DB, passing data to templates |
-| 1B.6 Flash messages | Session flash values, HTMX swaps |
+| 1B.6 Flash messages | Datastar signals for toast notifications |
 | 1B.7 Error pages | Echo error handler, custom templates |
 
 ### UI Stack
 - **Templ**: Type-safe HTML components
-- **HTMX**: AJAX navigation (`hx-boost`, `hx-swap`)
+- **Datastar**: Reactive UI, soft navigation, signals ([Guide](datastar-guide.md))
 - **Shoelace**: Web components (buttons, cards, icons)
 - **View Transitions API**: Smooth page animations
 
