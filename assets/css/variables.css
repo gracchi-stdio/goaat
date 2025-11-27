@@ -1,3 +1,85 @@
+/* 
+ * Custom Design Tokens
+ * Use Shoelace's built-in tokens where possible (--sl-*) and only define
+ * custom application-specific tokens here (without --sl- prefix to avoid conflicts)
+ */
+
 :root {
+    /* ===== Layout Constraints ===== */
     --max-w-sm: 400px;
+    --max-w-md: 768px;
+    --max-w-lg: 1024px;
+    --max-w-xl: 1280px;
+    
+    /* ===== Custom Spacing (extends Shoelace) ===== */
+    /* Shoelace provides: 3x-small through 4x-large */
+    /* Add any project-specific spacing here */
+    --space-xs: var(--sl-spacing-x-small);      /* 0.5rem */
+    --space-sm: var(--sl-spacing-small);        /* 0.75rem */
+    --space-md: var(--sl-spacing-medium);       /* 1rem */
+    --space-lg: var(--sl-spacing-large);        /* 1.25rem */
+    --space-xl: var(--sl-spacing-x-large);      /* 1.75rem */
+    --space-2xl: var(--sl-spacing-2x-large);    /* 2.25rem */
+    --space-3xl: var(--sl-spacing-3x-large);    /* 3rem */
+    
+    /* ===== Border Radius (extends Shoelace) ===== */
+    /* Shoelace provides: small, medium, large, x-large, circle, pill */
+    --radius-sm: var(--sl-border-radius-small);     /* 3px */
+    --radius-md: var(--sl-border-radius-medium);    /* 4px */
+    --radius-lg: var(--sl-border-radius-large);     /* 8px */
+    --radius-xl: var(--sl-border-radius-x-large);   /* 16px */
+    --radius-2xl: 1.5rem;                            /* 24px - custom */
+    
+    /* ===== Shadows (extends Shoelace) ===== */
+    /* Shoelace provides: x-small, small, medium, large, x-large */
+    --shadow-sm: var(--sl-shadow-small);
+    --shadow-md: var(--sl-shadow-medium);
+    --shadow-lg: var(--sl-shadow-large);
+    --shadow-xl: var(--sl-shadow-x-large);
+    
+    /* ===== Application-Specific Gradients ===== */
+    /* Using Shoelace color primitives for consistency */
+    --hero-gradient: linear-gradient(
+        135deg, 
+        var(--sl-color-primary-50) 0%, 
+        var(--sl-color-sky-50) 100%
+    );
+    
+    /* ===== Component Tokens ===== */
+    /* Card styling - uses Shoelace neutral palette */
+    --card-bg: var(--sl-color-neutral-0);
+    --card-border: var(--sl-color-neutral-200);
 }
+
+/* 
+ * Shoelace Color Customization
+ * Override Shoelace theme tokens here to customize your brand colors
+ * Available primitives: gray, red, orange, amber, yellow, lime, green, emerald,
+ *                       teal, cyan, sky, blue, indigo, violet, purple, fuchsia, pink, rose
+ * 
+ * Theme tokens that can be customized:
+ * - primary (default: sky)
+ * - success (default: green)
+ * - warning (default: amber)
+ * - danger (default: red)
+ * - neutral (default: gray)
+ *
+ * To customize, uncomment the :root block below and change the color primitive values
+ */
+
+/*
+:root {
+    --sl-color-primary-50: var(--sl-color-purple-50);
+    --sl-color-primary-100: var(--sl-color-purple-100);
+    --sl-color-primary-200: var(--sl-color-purple-200);
+    --sl-color-primary-300: var(--sl-color-purple-300);
+    --sl-color-primary-400: var(--sl-color-purple-400);
+    --sl-color-primary-500: var(--sl-color-purple-500);
+    --sl-color-primary-600: var(--sl-color-purple-600);
+    --sl-color-primary-700: var(--sl-color-purple-700);
+    --sl-color-primary-800: var(--sl-color-purple-800);
+    --sl-color-primary-900: var(--sl-color-purple-900);
+    --sl-color-primary-950: var(--sl-color-purple-950);
+}
+*/
+

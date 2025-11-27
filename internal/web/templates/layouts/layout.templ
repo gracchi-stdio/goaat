@@ -1,8 +1,8 @@
 package layouts
 
 import (
-	"os"
 	"github.com/gracchi-stdio/goaat/internal/auth"
+	"os"
 )
 
 // Base layout component that wraps all pages
@@ -26,35 +26,130 @@ templ Layout(title string, class string) {
 				<script type="module" src="/js/main.js"></script>
 			}
 		</head>
-		<body class={ class }>
+		<body class={ class } data-store="{alerts: [], viewTransition: true}">
+			<!-- Persistent Alerts Container (Top Right) -->
+			<div id="alert-container" 
+				style="position: fixed; top: var(--sl-spacing-large); right: var(--sl-spacing-large); z-index: var(--sl-z-index-toast); display: flex; flex-direction: column; gap: var(--sl-spacing-small); max-width: 400px;">
+				<!-- Alerts will be injected here via Datastar -->
+			</div>
 			
-			<!-- Persistent Status Badge -->
-			<div id="persistent-status" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
-				<sl-badge variant="primary" pill>System Online</sl-badge>
+			<div id="app-shell">
+				{ children... }
 			</div>
 
-			<main class="view-transition">
-				{ children... }
-			</main>
-			<footer>
-				<p>&copy; 2025 Goaat - Built with Echo, Templ & PostgreSQL</p>
-			</footer>
 		</body>
 	</html>
 }
 
+// PageContentWrapper wraps the content in the main tag, used by Datastar handlers
+templ PageContentWrapper(content templ.Component) {
+	<main id="page-content" class="app-content view-transition" data-transition-name="page-content">
+		@content
+	</main>
+}
 
 templ AuthedLayout(title string, class string) {
-	@Layout(title, class) {
-		<nav>
-			<ul>
-				<li><a href="/">Home</a></li>
-				<li><a href="/admin/authors">Authors</a></li>
-				<li style="margin-left: auto;">Welcome, { auth.GetUserFromContext(ctx).Name } | <button data-on:click="@post('/logout/github')" style="background: none; border: none; color: inherit; cursor: pointer; text-decoration: underline;">Logout
-		<span data-show="$_loading">Loading...</span>		
-				</button></li>
-			</ul>
-		</nav>
-		{ children... }
+	@Layout(title, "authed-layout " + class) {
+		<div class="app-container">
+			<!-- Sidebar Drawer -->
+			<aside class="app-drawer" id="app-drawer">
+				<!-- Logo Header -->
+				<div class="sidebar-header">
+					<sl-icon name="box" library="default"></sl-icon>
+					<h2>Goaat</h2>
+				</div>
+
+				<!-- Navigation Menu with Datastar -->
+				<nav class="sidebar-nav">
+					<a href="/admin/dashboard" 
+						data-on-click__prevent="$$get('/admin/dashboard')">
+						<sl-icon name="grid" library="default"></sl-icon>
+						<span>Dashboard</span>
+					</a>
+					<a href="/admin/repositories" 
+						data-on-click__prevent="$$get('/admin/repositories')">
+						<sl-icon name="folder" library="default"></sl-icon>
+						<span>Repositories</span>
+					</a>
+					<a href="/admin/authors" 
+						data-on-click__prevent="$$get('/admin/authors')">
+						<sl-icon name="people" library="default"></sl-icon>
+						<span>Authors</span>
+					</a>
+					<a href="/admin/settings" 
+						data-on-click__prevent="$$get('/admin/settings')">
+						<sl-icon name="gear" library="default"></sl-icon>
+						<span>Settings</span>
+					</a>
+				</nav>
+
+				<!-- User Menu Footer -->
+				<div class="sidebar-footer">
+					<sl-dropdown placement="top-start">
+						<sl-button slot="trigger" variant="text" size="large" caret style="width: 100%; justify-content: flex-start;">
+							<sl-avatar 
+								slot="prefix"
+								image={ auth.GetUserFromContext(ctx).AvatarURL } 
+								label={ auth.GetUserFromContext(ctx).Name }
+							></sl-avatar>
+							<div style="flex: 1; text-align: left; min-width: 0;">
+								<div style="font-weight: var(--sl-font-weight-semibold); font-size: var(--sl-font-size-small); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+									{ auth.GetUserFromContext(ctx).Name }
+								</div>
+								<div style="font-size: var(--sl-font-size-x-small); color: var(--sl-color-neutral-500); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+									{ auth.GetUserFromContext(ctx).Email }
+								</div>
+							</div>
+						</sl-button>
+						<sl-menu>
+							<sl-menu-item 
+								data-on-click="$$get('/admin/profile')">
+								<sl-icon slot="prefix" name="person"></sl-icon>
+								Profile
+							</sl-menu-item>
+							<sl-menu-item 
+								data-on-click="$$get('/admin/settings')">
+								<sl-icon slot="prefix" name="gear"></sl-icon>
+								Settings
+							</sl-menu-item>
+							<sl-divider></sl-divider>
+							<sl-menu-item>
+								<form action="/logout" method="POST" style="margin: 0; width: 100%;">
+									<button type="submit" style="all: unset; width: 100%; cursor: pointer; display: flex; align-items: center; gap: var(--sl-spacing-x-small);">
+										<sl-icon name="box-arrow-right"></sl-icon>
+										<span>Logout</span>
+									</button>
+								</form>
+							</sl-menu-item>
+						</sl-menu>
+					</sl-dropdown>
+				</div>
+			</aside>
+
+			<!-- Main Content -->
+			<div class="app-main">
+				<!-- Top Header with Breadcrumbs -->
+				<header class="app-header">
+					<sl-button variant="text" size="medium" class="mobile-menu-toggle" onclick="document.getElementById('app-drawer').classList.toggle('is-open')">
+						<sl-icon name="list" library="default"></sl-icon>
+					</sl-button>
+					<sl-breadcrumb>
+						<sl-breadcrumb-item href="/admin/dashboard" data-on-click__prevent="$$get('/admin/dashboard')">
+							<sl-icon slot="prefix" name="house"></sl-icon>
+							Dashboard
+						</sl-breadcrumb-item>
+						if title != "Dashboard" {
+							<sl-breadcrumb-item>{ title }</sl-breadcrumb-item>
+						}
+					</sl-breadcrumb>
+				</header>
+
+				<!-- Page Content -->
+				<main id="page-content" class="app-content view-transition" data-transition-name="page-content">
+					{ children... }
+				</main>
+			</div>
+		</div>
 	}
 }
+

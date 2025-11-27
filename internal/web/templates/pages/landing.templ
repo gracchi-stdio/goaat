@@ -1,0 +1,186 @@
+package pages
+
+import (
+	"github.com/gracchi-stdio/goaat/internal/auth"
+	"github.com/gracchi-stdio/goaat/internal/web/templates/layouts"
+)
+
+templ Landing() {
+	@layouts.Layout("Goaat - Edit Your Astro Starlight Docs", "landing-page") {
+		<!-- Hero Section -->
+		<section class="hero">
+			<div class="hero-content">
+				<h1>Edit Your Astro Starlight Docs<br/>with Ease</h1>
+				<p class="subtitle">
+					A modern backend for managing your documentation repositories. 
+					Authenticate with GitHub, clone your repos, and start editing your Starlight content in seconds.
+				</p>
+				<div class="hero-actions">
+					if !auth.GetUserFromContext(ctx).IsAuthenticated() {
+						<sl-button variant="primary" size="large" href="#cta">
+							<sl-icon slot="prefix" name="github"></sl-icon>
+							Get Started with GitHub
+						</sl-button>
+					}
+					<sl-button variant="default" size="large" href="#features">
+						Learn More
+					</sl-button>
+				</div>
+			</div>
+		</section>
+
+		<!-- Features Section -->
+		<section class="features" id="features">
+			<div class="features-container">
+				<div class="section-header">
+					<h2>Everything You Need</h2>
+					<p>Built for developers who want a streamlined documentation editing workflow</p>
+				</div>
+				
+				<div class="features-grid">
+					<div class="feature-card">
+						<div class="feature-icon">
+							<sl-icon name="github"></sl-icon>
+						</div>
+						<h3>GitHub Integration</h3>
+						<p>
+							Seamlessly authenticate with GitHub OAuth and access all your repositories. 
+							No complicated setup required.
+						</p>
+					</div>
+
+					<div class="feature-card">
+						<div class="feature-icon">
+							<sl-icon name="file-earmark-text"></sl-icon>
+						</div>
+						<h3>Markdown Editing</h3>
+						<p>
+							Edit your Astro Starlight markdown files with frontmatter validation 
+							and syntax highlighting.
+						</p>
+					</div>
+
+					<div class="feature-card">
+						<div class="feature-icon">
+							<sl-icon name="eye"></sl-icon>
+						</div>
+						<h3>Live Preview</h3>
+						<p>
+							See how your changes will look in Starlight before committing. 
+							Real-time rendering as you type.
+						</p>
+					</div>
+
+					<div class="feature-card">
+						<div class="feature-icon">
+							<sl-icon name="git"></sl-icon>
+						</div>
+						<h3>Git Operations</h3>
+						<p>
+							Clone, pull, commit, and push changes directly from the interface. 
+							Create pull requests with ease.
+						</p>
+					</div>
+
+					<div class="feature-card">
+						<div class="feature-icon">
+							<sl-icon name="people"></sl-icon>
+						</div>
+						<h3>Collaboration Ready</h3>
+						<p>
+							Work with your team on documentation. Review changes and 
+							manage contributions efficiently.
+						</p>
+					</div>
+
+					<div class="feature-card">
+						<div class="feature-icon">
+							<sl-icon name="shield-check"></sl-icon>
+						</div>
+						<h3>Secure & Fast</h3>
+						<p>
+							Built with Go and PostgreSQL for speed and reliability. 
+							Your data stays secure with OAuth authentication.
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- How It Works Section -->
+		<section class="how-it-works">
+			<div class="features-container">
+				<div class="section-header">
+					<h2>How It Works</h2>
+					<p>Get started in three simple steps</p>
+				</div>
+
+				<div class="steps">
+					<div class="step">
+						<div class="step-number">1</div>
+						<div class="step-content">
+							<h3>Connect Your GitHub</h3>
+							<p>
+								Sign in with your GitHub account using OAuth. We'll securely access 
+								your repositories with your permission.
+							</p>
+						</div>
+					</div>
+
+					<div class="step">
+						<div class="step-number">2</div>
+						<div class="step-content">
+							<h3>Select Your Repository</h3>
+							<p>
+								Choose the Astro Starlight repository you want to edit. 
+								We'll clone it and set up your editing environment.
+							</p>
+						</div>
+					</div>
+
+					<div class="step">
+						<div class="step-number">3</div>
+						<div class="step-content">
+							<h3>Start Editing</h3>
+							<p>
+								Browse your content, edit markdown files, preview changes, 
+								and commit directly to your repository.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- CTA Section -->
+		<section class="cta" id="cta">
+			<div class="cta-content">
+				if auth.GetUserFromContext(ctx).IsAuthenticated() {
+					<h2>Welcome Back, { auth.GetUserFromContext(ctx).Name }!</h2>
+					<p>
+						Continue managing your Astro Starlight documentation.
+					</p>
+					<sl-button variant="default" size="large" href="/admin/authors">
+						<sl-icon slot="prefix" name="box-arrow-in-right"></sl-icon>
+						Go to Dashboard
+					</sl-button>
+				} else {
+					<h2>Ready to Improve Your Workflow?</h2>
+					<p>
+						Join developers who are already using Goaat to manage their 
+						Astro Starlight documentation.
+					</p>
+					<sl-button variant="default" size="large" href="/auth/github">
+						<sl-icon slot="prefix" name="github"></sl-icon>
+						Sign In with GitHub
+					</sl-button>
+				}
+			</div>
+		</section>
+
+		<!-- Footer -->
+		<footer class="landing-footer">
+			<p>&copy; 2025 Goaat. Built with Echo, Templ, and PostgreSQL.</p>
+		</footer>
+	}
+}

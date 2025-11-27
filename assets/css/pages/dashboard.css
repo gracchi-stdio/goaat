@@ -1,0 +1,40 @@
+/* 
+ * Dashboard Page Styles
+ * Uses Shoelace design tokens exclusively
+ */
+
+.dashboard-container {
+  max-width: 1400px;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--sl-spacing-2x-large);
+  gap: var(--sl-spacing-large);
+}
+
+.page-title {
+  font-size: var(--sl-font-size-2x-large);
+  font-weight: var(--sl-font-weight-semibold);
+  color: var(--sl-color-neutral-700);
+  margin: 0 0 var(--sl-spacing-x-small) 0;
+}
+
+.page-subtitle {
+  font-size: var(--sl-font-size-medium);
+  color: var(--sl-color-neutral-500);
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+  }
+
+  .page-title {
+    font-size: var(--sl-font-size-x-large);
+  }
+}

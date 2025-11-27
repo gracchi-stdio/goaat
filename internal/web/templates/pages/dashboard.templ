@@ -1,0 +1,135 @@
+package pages
+
+import (
+	"github.com/gracchi-stdio/goaat/internal/auth"
+	"github.com/gracchi-stdio/goaat/internal/web/templates/layouts"
+)
+
+templ DashboardContent() {
+	<!-- Page Header -->
+	<div class="page-header">
+		<div>
+			<h1 class="page-title">Welcome back, { auth.GetUserFromContext(ctx).Name }!</h1>
+			<p class="page-subtitle">Here's what's happening with your documentation projects</p>
+		</div>
+		<sl-button variant="primary">
+			<sl-icon slot="prefix" name="plus-lg"></sl-icon>
+			New Repository
+		</sl-button>
+	</div>
+
+	<!-- Stats Grid -->
+	<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--sl-spacing-medium); margin-bottom: var(--sl-spacing-x-large);">
+		<sl-card>
+			<div slot="header" style="display: flex; align-items: center; gap: var(--sl-spacing-small);">
+				<sl-icon name="folder" style="font-size: var(--sl-font-size-x-large); color: var(--sl-color-primary-600);"></sl-icon>
+				<strong>Repositories</strong>
+			</div>
+			<div style="font-size: var(--sl-font-size-3x-large); font-weight: var(--sl-font-weight-bold); margin-bottom: var(--sl-spacing-x-small);">
+				0
+			</div>
+			<div style="color: var(--sl-color-neutral-500); font-size: var(--sl-font-size-small);">
+				Connected repositories
+			</div>
+		</sl-card>
+
+		<sl-card>
+			<div slot="header" style="display: flex; align-items: center; gap: var(--sl-spacing-small);">
+				<sl-icon name="file-earmark-text" style="font-size: var(--sl-font-size-x-large); color: var(--sl-color-success-600);"></sl-icon>
+				<strong>Documents</strong>
+			</div>
+			<div style="font-size: var(--sl-font-size-3x-large); font-weight: var(--sl-font-weight-bold); margin-bottom: var(--sl-spacing-x-small);">
+				0
+			</div>
+			<div style="color: var(--sl-color-neutral-500); font-size: var(--sl-font-size-small);">
+				Markdown files edited
+			</div>
+		</sl-card>
+
+		<sl-card>
+			<div slot="header" style="display: flex; align-items: center; gap: var(--sl-spacing-small);">
+				<sl-icon name="git" style="font-size: var(--sl-font-size-x-large); color: var(--sl-color-warning-600);"></sl-icon>
+				<strong>Commits</strong>
+			</div>
+			<div style="font-size: var(--sl-font-size-3x-large); font-weight: var(--sl-font-weight-bold); margin-bottom: var(--sl-spacing-x-small);">
+				0
+			</div>
+			<div style="color: var(--sl-color-neutral-500); font-size: var(--sl-font-size-small);">
+				Total commits made
+			</div>
+		</sl-card>
+
+		<sl-card>
+			<div slot="header" style="display: flex; align-items: center; gap: var(--sl-spacing-small);">
+				<sl-icon name="clock-history" style="font-size: var(--sl-font-size-x-large); color: var(--sl-color-danger-600);"></sl-icon>
+				<strong>Recent Changes</strong>
+			</div>
+			<div style="font-size: var(--sl-font-size-3x-large); font-weight: var(--sl-font-weight-bold); margin-bottom: var(--sl-spacing-x-small);">
+				0
+			</div>
+			<div style="color: var(--sl-color-neutral-500); font-size: var(--sl-font-size-small);">
+				This week
+			</div>
+		</sl-card>
+	</div>
+
+	<!-- Main Content Grid -->
+	<div style="display: grid; gap: var(--sl-spacing-large);">
+		<!-- Recent Activity Card -->
+		<sl-card>
+			<div slot="header" style="display: flex; justify-content: space-between; align-items: center;">
+				<strong>Recent Activity</strong>
+				<sl-button variant="text" size="small">View All</sl-button>
+			</div>
+			
+			<sl-alert variant="neutral" open>
+				<sl-icon slot="icon" name="inbox"></sl-icon>
+				<strong>No recent activity yet</strong><br/>
+				<div style="margin-top: var(--sl-spacing-small);">
+					Start by connecting a repository to see your activity here.
+				</div>
+			</sl-alert>
+		</sl-card>
+
+		<!-- Quick Actions Card -->
+		<sl-card>
+			<div slot="header">
+				<strong>Quick Actions</strong>
+				<br/>
+				<small style="color: var(--sl-color-neutral-500);">Common tasks to get you started</small>
+			</div>
+			
+			<div style="display: grid; gap: var(--sl-spacing-small);">
+				<sl-button variant="default" size="large" outline style="justify-content: flex-start; text-align: left;">
+					<sl-icon slot="prefix" name="folder-plus"></sl-icon>
+					<div style="display: flex; flex-direction: column; gap: var(--sl-spacing-3x-small);">
+						<strong>Connect Repository</strong>
+						<small style="color: var(--sl-color-neutral-500); font-weight: normal;">Link a Starlight docs repo</small>
+					</div>
+				</sl-button>
+
+				<sl-button variant="default" size="large" outline disabled style="justify-content: flex-start; text-align: left;">
+					<sl-icon slot="prefix" name="file-earmark-plus"></sl-icon>
+					<div style="display: flex; flex-direction: column; gap: var(--sl-spacing-3x-small);">
+						<strong>Create Document</strong>
+						<small style="color: var(--sl-color-neutral-500); font-weight: normal;">Add new markdown file</small>
+					</div>
+				</sl-button>
+
+				<sl-button variant="default" size="large" outline style="justify-content: flex-start; text-align: left;">
+					<sl-icon slot="prefix" name="person-gear"></sl-icon>
+					<div style="display: flex; flex-direction: column; gap: var(--sl-spacing-3x-small);">
+						<strong>Edit Profile</strong>
+						<small style="color: var(--sl-color-neutral-500); font-weight: normal;">Update your settings</small>
+					</div>
+				</sl-button>
+			</div>
+		</sl-card>
+	</div>
+}
+
+templ Dashboard() {
+	@layouts.AuthedLayout("Dashboard", "dashboard-page") {
+		@DashboardContent()
+	}
+}

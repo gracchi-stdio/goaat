@@ -1,0 +1,72 @@
+package pages
+
+import (
+	"github.com/gracchi-stdio/goaat/internal/web/templates/layouts"
+)
+
+templ SettingsContent() {
+	<!-- Page Header -->
+	<div class="page-header">
+		<div>
+			<h1 class="page-title">Settings</h1>
+			<p class="page-subtitle">Manage your application preferences</p>
+		</div>
+	</div>
+
+	<div style="display: grid; gap: var(--sl-spacing-large);">
+		<!-- Notification Test Section -->
+		<sl-card>
+			<div slot="header">
+				<strong>Notification Tests</strong>
+			</div>
+			
+			<div style="display: flex; flex-direction: column; gap: var(--sl-spacing-medium);">
+				<p>Test the notification system persistence across navigation.</p>
+				
+				<div style="display: flex; gap: var(--sl-spacing-medium); flex-wrap: wrap;">
+					<sl-button variant="primary" 
+						onclick="window.showAlert('This is a standard alert', 'primary')">
+						Show Standard Alert
+					</sl-button>
+
+					<sl-button variant="success" 
+						onclick="window.showAlert('This alert should persist!', 'success'); setTimeout(() => document.querySelector('a[href=\'/admin/dashboard\']').click(), 500);">
+						Show & Navigate (JS Click)
+					</sl-button>
+
+					<!-- Datastar way: Execute script to show alert, then get new page -->
+					<!-- Note: We need to make sure the alert isn't cleared by the swap. 
+							Since #alert-container is outside #main-content, it should be fine. -->
+					<sl-button variant="warning" 
+						data-on-click="window.showAlert('Navigation Persistence Test', 'warning'); $$get('/admin/dashboard')">
+						Show & Navigate (Datastar)
+					</sl-button>
+				</div>
+			</div>
+		</sl-card>
+
+		<!-- General Settings (Placeholder) -->
+		<sl-card>
+			<div slot="header">
+				<strong>General Settings</strong>
+			</div>
+			<form class="input-group">
+				<sl-input label="Site Name" value="My Documentation Site"></sl-input>
+				<sl-select label="Theme" value="system">
+					<sl-option value="light">Light</sl-option>
+					<sl-option value="dark">Dark</sl-option>
+					<sl-option value="system">System</sl-option>
+				</sl-select>
+				<div style="margin-top: var(--sl-spacing-medium);">
+					<sl-button variant="primary">Save Changes</sl-button>
+				</div>
+			</form>
+		</sl-card>
+	</div>
+}
+
+templ Settings() {
+	@layouts.AuthedLayout("Settings", "settings-page") {
+		@SettingsContent()
+	}
+}

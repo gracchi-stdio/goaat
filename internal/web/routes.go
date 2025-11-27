@@ -13,13 +13,15 @@ func RegisterRoutes(e *echo.Echo, queries *db.Queries, authService auth.Service)
 	// Initialize handlers with dependencies
 	h := handlers.New(queries, authService)
 
-	// Health checks
-	e.GET("/", h.HelloPage)
-	e.GET("/health", h.Health)
+	// Public pages with user context
+	publicPages := e.Group("")
+	publicPages.Use(middleware.InjectUser)
+	publicPages.GET("/", h.LandingPage)
+	publicPages.GET("/hello", h.HelloPage)
+	publicPages.GET("/login", h.LoginPage)
 
-	// Templ pages
-	e.GET("/hello", h.HelloPage)
-	e.GET("/login", h.LoginPage)
+	// Health checks (no user needed)
+	e.GET("/health", h.Health)
 
 	// Auth routes
 	e.GET("/auth/:provider", h.Auth)
@@ -30,7 +32,12 @@ func RegisterRoutes(e *echo.Echo, queries *db.Queries, authService auth.Service)
 	// Authenticated routes
 	authGroup := e.Group("/admin")
 	authGroup.Use(middleware.RequireAuth)
+	authGroup.GET("/dashboard", h.DashboardPage)
 	authGroup.GET("/authors", h.AuthorListPage)
+	authGroup.GET("/profile", h.ProfilePage)
+	authGroup.POST("/profile/update", h.UpdateProfile)
+	authGroup.GET("/repositories", h.RepositoriesPage)
+	authGroup.GET("/settings", h.SettingsPage)
 
 	// API
 	e.GET("/api/authors", h.ListAuthors)

@@ -9,6 +9,7 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/labstack/echo/v4"
 	"github.com/markbates/goth/gothic"
+	"github.com/starfederation/datastar-go/datastar"
 )
 
 // Auth initiates the OAuth flow
@@ -33,6 +34,11 @@ func (h *Handler) AuthCallback(c echo.Context) error {
 	provider := c.Param("provider")
 	if provider == "" {
 		return echo.NewHTTPError(http.StatusBadRequest, "Provider not specified")
+	}
+
+	// Check DB availability before proceeding
+	if h.DB == nil {
+		return echo.NewHTTPError(http.StatusServiceUnavailable, "database unavailable")
 	}
 
 	// Add provider to context for gothic
@@ -101,7 +107,7 @@ func (h *Handler) Logout(c echo.Context) error {
 	// Check if this is a Datastar request (SSE) - Datastar sends Accept: text/event-stream
 	accept := c.Request().Header.Get("Accept")
 	if accept == "text/event-stream" || c.Request().Header.Get("Datastar-Request") != "" {
-		sse := SSE(c)
+		sse := datastar.NewSSE(c.Response().Writer, c.Request())
 		return sse.Redirect("/")
 	}
 

@@ -6,10 +6,9 @@ import (
 
 templ Hello(name string) {
 	@layouts.Layout("Hello", "") {
-		<h1>Hello, { name }!</h1>
-		<p>Welcome to Goaat</p>
-		<sl-button>Button</sl-button>
-		<p><sl-button data-on:click="@get('/admin/authors')">See Authors</sl-button></p>
+		<h1>Welcome to { name }!</h1>
+		<p><sl-button data-on:click="@get('/admin/dashboard')">Dashboard
+		</sl-button></p>
 		<sl-dialog label="Dialog" class="dialog-overview">
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 			<sl-button slot="footer" variant="primary">Close</sl-button>
@@ -26,13 +25,17 @@ templ Hello(name string) {
 	}
 }
 
+templ AuthorListContent(authors []string) {
+	<h1>Authors</h1>
+	<ul style="list-style: none; padding: 0;">
+		for _, author := range authors {
+			<li style="padding: 0.5rem; border-bottom: 1px solid #eee;">{ author }</li>
+		}
+	</ul>
+}
+
 templ AuthorList(authors []string) {
 	@layouts.AuthedLayout("Authors", "") {
-		<h1>Authors</h1>
-		<ul style="list-style: none; padding: 0;">
-			for _, author := range authors {
-				<li style="padding: 0.5rem; border-bottom: 1px solid #eee;">{ author }</li>
-			}
-		</ul>
+		@AuthorListContent(authors)
 	}
 }

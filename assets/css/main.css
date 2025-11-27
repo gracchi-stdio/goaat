@@ -1,10 +1,18 @@
+/* Define layer order - layers cascade in the order declared */
+@layer reset, base, tokens, components, utilities, pages;
+
 /* Import Shoelace base styles and theme */
 @import '@shoelace-style/shoelace/dist/themes/light.css' layer(shoelace-light);
 @import '@shoelace-style/shoelace/dist/themes/dark.css' layer(shoelace-dark);
 
-@import 'variables.css';
+@import 'variables.css' layer(tokens);
 /* Import Page Styles */
-@import 'pages/login.css';
+@import 'pages/login.css' layer(pages);
+@import 'pages/landing.css' layer(pages);
+@import 'pages/authed.css' layer(pages);
+@import 'pages/profile.css' layer(pages);
+@import 'pages/dashboard.css' layer(pages);
+@import 'pages/landing.css' layer(pages);
 
 /* Apply Shoelace light theme by default */
 :root,
@@ -36,105 +44,177 @@
   /* --sl-spacing-medium: 1rem; */
 }
 
-/* Global styles */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@layer reset {
+  /* Reset styles */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Prevent FOUC for Custom Elements (Shoelace) */
+  :not(:defined) {
+    visibility: hidden;
+  }
 }
 
-/* Prevent FOUC for Custom Elements (Shoelace) */
-:not(:defined) {
-  visibility: hidden;
+@layer base {
+  html {
+    font-family: var(--sl-font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Body inherits colors from Shoelace theme */
+  body {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    min-height: 100vh;
+    font-family: var(--sl-font-sans);
+    line-height: 1.6;
+  }
+
+  /* Dark theme colors for body */
+  html.sl-theme-dark body {
+    background-color: rgb(24, 24, 27);
+    color: rgb(255, 255, 255);
+  }
+
+  /* Heading styles */
+  h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--sl-color-neutral-900);
+  }
+
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 2rem; }
+  h3 { font-size: 1.75rem; }
+  h4 { font-size: 1.5rem; }
+  h5 { font-size: 1.25rem; }
+  h6 { font-size: 1rem; }
+
+  html.sl-theme-dark h1,
+  html.sl-theme-dark h2,
+  html.sl-theme-dark h3,
+  html.sl-theme-dark h4,
+  html.sl-theme-dark h5,
+  html.sl-theme-dark h6 {
+    color: var(--sl-color-neutral-100);
+  }
+
+  /* Paragraph styles */
+  p {
+    margin-bottom: 1rem;
+  }
+
+  /* Link styles */
+  a {
+    color: var(--sl-color-primary-600);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  a:hover {
+    color: var(--sl-color-primary-700);
+    text-decoration: underline;
+  }
 }
 
-html {
-  font-family: var(--sl-font-sans);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@layer components {
+  /* Component-specific customizations */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--sl-spacing-large);
+  }
 }
 
-/* Body inherits colors from Shoelace theme */
-body {
-  background-color: rgb(255, 255, 255);
-  color: rgb(0, 0, 0);
-  min-height: 100vh;
-  font-family: var(--sl-font-sans);
-  line-height: 1.6;
+@layer utilities {
+  /* Custom utility classes */
+  .text-center {
+    text-align: center;
+  }
+
+  .mt-1 { margin-top: var(--sl-spacing-x-small); }
+  .mt-2 { margin-top: var(--sl-spacing-small); }
+  .mt-3 { margin-top: var(--sl-spacing-medium); }
+  .mt-4 { margin-top: var(--sl-spacing-large); }
+  .mt-5 { margin-top: var(--sl-spacing-x-large); }
+
+  .mb-1 { margin-bottom: var(--sl-spacing-x-small); }
+  .mb-2 { margin-bottom: var(--sl-spacing-small); }
+  .mb-3 { margin-bottom: var(--sl-spacing-medium); }
+  .mb-4 { margin-bottom: var(--sl-spacing-large); }
+  .mb-5 { margin-bottom: var(--sl-spacing-x-large); }
+
+  /* View Transitions */
+  
+  /* Disable default root transition to avoid full page animation */
+  :root {
+    view-transition-name: none;
+  }
+
+  /* Enable transition for page content */
+  #page-content {
+    view-transition-name: page-content;
+  }
 }
-
-/* Dark theme colors for body */
-html.sl-theme-dark body {
-  background-color: rgb(24, 24, 27);
-  color: rgb(255, 255, 255);
-}
-
-/* Component-specific customizations */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: var(--sl-spacing-large);
-}
-
-/* Custom utility classes */
-.text-center {
-  text-align: center;
-}
-
-.mt-1 { margin-top: var(--sl-spacing-x-small); }
-.mt-2 { margin-top: var(--sl-spacing-small); }
-.mt-3 { margin-top: var(--sl-spacing-medium); }
-.mt-4 { margin-top: var(--sl-spacing-large); }
-.mt-5 { margin-top: var(--sl-spacing-x-large); }
-
-.mb-1 { margin-bottom: var(--sl-spacing-x-small); }
-.mb-2 { margin-bottom: var(--sl-spacing-small); }
-.mb-3 { margin-bottom: var(--sl-spacing-medium); }
-.mb-4 { margin-bottom: var(--sl-spacing-large); }
-.mb-5 { margin-bottom: var(--sl-spacing-x-large); }
 
 /* View Transitions API Support for cross-document navigation */
 @view-transition {
   navigation: auto;
 }
 
-/* Smooth page transitions */
+/* Smooth page transitions for main content */
+::view-transition-old(main-content),
+::view-transition-new(main-content) {
+  animation-duration: 0.25s;
+}
+
 ::view-transition-old(main-content) {
-  animation: fade-out 0.15s ease-out forwards;
+  animation-name: fade-out, slide-to-left;
 }
 
 ::view-transition-new(main-content) {
-  animation: fade-in 0.15s ease-in forwards;
+  animation-name: fade-in, slide-from-right;
 }
 
 @keyframes fade-out {
-  from { opacity: 1; }
   to { opacity: 0; }
 }
 
 @keyframes fade-in {
   from { opacity: 0; }
-  to { opacity: 1; }
 }
 
-/* Slide transitions for navigation */
-::view-transition-old(root) {
-  animation: slide-out 0.25s ease-out;
+@keyframes slide-to-left {
+  to { transform: translateX(-30px); }
 }
 
-::view-transition-new(root) {
-  animation: slide-in 0.25s ease-in;
+@keyframes slide-from-right {
+  from { transform: translateX(30px); }
 }
 
-@keyframes slide-out {
-  from { opacity: 1; transform: translateX(0); }
-  to { opacity: 0; transform: translateX(-10px); }
+/* Fallback for browsers without view transitions */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(main-content),
+  ::view-transition-new(main-content) {
+    animation: none !important;
+  }
 }
 
-@keyframes slide-in {
-  from { opacity: 0; transform: translateX(10px); }
-  to { opacity: 1; transform: translateX(0); }
+/* Active navigation state */
+.sidebar-nav a.active {
+  background: var(--sl-color-primary-100);
+  color: var(--sl-color-primary-700);
+}
+
+html.sl-theme-dark .sidebar-nav a.active {
+  background: var(--sl-color-primary-900);
+  color: var(--sl-color-primary-300);
 }
 
 main.view-transition {

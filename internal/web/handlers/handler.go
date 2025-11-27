@@ -4,6 +4,7 @@ import (
 	"github.com/a-h/templ"
 	"github.com/gracchi-stdio/goaat/internal/auth"
 	"github.com/gracchi-stdio/goaat/internal/platform/db"
+	"github.com/gracchi-stdio/goaat/internal/web/templates/layouts"
 	"github.com/labstack/echo/v4"
 	"github.com/starfederation/datastar-go/datastar"
 )
@@ -29,14 +30,18 @@ func Render(c echo.Context, component templ.Component) error {
 	return component.Render(c.Request().Context(), c.Response().Writer)
 }
 
-// SSE creates a new Datastar Server-Sent Event generator for streaming responses.
-// Use this for AJAX-style updates via Datastar's @get(), @post(), etc. actions.
-func SSE(c echo.Context) *datastar.ServerSentEventGenerator {
-	return datastar.NewSSE(c.Response(), c.Request())
-}
+// RenderWithDatastar renders a templ component and handles Datastar partial updates
+func RenderWithDatastar(c echo.Context, component templ.Component) error {
+	// Check if this is a Datastar request
+	if c.Request().Header.Get("datastar-request") != "" {
+		sse := datastar.NewSSE(c.Response().Writer, c.Request())
+		// Wrap the content in the PageContent layout to preserve the <main> tag and ID
+		return sse.PatchElementTempl(layouts.PageContentWrapper(component),
+			datastar.WithSelectorID("page-content"),
+			datastar.WithViewTransitions(),
+		)
+	}
 
-// SSEWithContext creates an SSE generator with a custom context.
-// Useful for passing values to templ components during SSE rendering.
-func SSEWithContext(c echo.Context) *datastar.ServerSentEventGenerator {
-	return datastar.NewSSE(c.Response(), c.Request(), datastar.WithContext(c.Request().Context()))
+	// Regular full page render
+	return component.Render(c.Request().Context(), c.Response().Writer)
 }

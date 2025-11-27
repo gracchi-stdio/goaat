@@ -40,6 +40,7 @@ services:
       - /app/tmp
       - /app/node_modules
     command: sh -c "yarn dev & air -c .air.toml"
+    network_mode: host
 
 volumes:
   postgres_data:
