@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"github.com/gracchi-stdio/goaat/internal/web/templates/components"
 	"github.com/gracchi-stdio/goaat/internal/web/templates/pages"
 	"github.com/labstack/echo/v4"
+	"github.com/starfederation/datastar-go/datastar"
 )
 
 // ProfilePage renders the user profile page
@@ -17,9 +19,6 @@ func (h *Handler) ProfilePage(c echo.Context) error {
 func (h *Handler) UpdateProfile(c echo.Context) error {
 	// TODO: Implement actual profile update logic
 
-	// For now, just show success alert and redirect
-	c.Response().Header().Set("HX-Trigger", "profile-updated")
-
-	// Redirect back to profile page
-	return c.Redirect(302, "/admin/profile")
+	sse := datastar.NewSSE(c.Response().Writer, c.Request())
+	return sse.PatchElementTempl(components.Toast("Profile updated successfully", "success"))
 }

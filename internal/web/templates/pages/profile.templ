@@ -6,62 +6,35 @@ import (
 )
 
 templ ProfileContent() {
-	<!-- Page Header -->
-	<div class="page-header">
-		<div>
+	<div class="profile-page">
+		<div class="page-header">
 			<h1 class="page-title">Profile</h1>
-			<p class="page-subtitle">Manage your account settings and preferences</p>
+			<p class="page-subtitle">Manage your account settings</p>
 		</div>
-	</div>
 
-	<div class="profile-grid">
-		<!-- Profile Card -->
-		<sl-card class="profile-card">
-			<div class="profile-header">
-				<sl-avatar 
-					image={ auth.GetUserFromContext(ctx).AvatarURL } 
-					label={ auth.GetUserFromContext(ctx).Name }
-					style="--size: 6rem; font-size: 2rem;"
-				></sl-avatar>
-				<div class="profile-info">
-					<h2>{ auth.GetUserFromContext(ctx).Name }</h2>
-					<p>{ auth.GetUserFromContext(ctx).Email }</p>
-					<sl-badge variant="success" pill>Active</sl-badge>
-				</div>
-			</div>
-			
-			<sl-divider></sl-divider>
-			
-			<div class="profile-stats">
-				<div class="stat-item">
-					<span class="stat-value">0</span>
-					<span class="stat-label">Repos</span>
-				</div>
-				<div class="stat-item">
-					<span class="stat-value">0</span>
-					<span class="stat-label">Edits</span>
-				</div>
-				<div class="stat-item">
-					<span class="stat-value">0</span>
-					<span class="stat-label">Days</span>
-				</div>
-			</div>
-		</sl-card>
-
-		<!-- Edit Form -->
 		<sl-card class="profile-form-card">
-			<div slot="header">
-				<strong>Edit Profile</strong>
-			</div>
-			
-			<form action="/admin/profile/update" method="POST" class="input-group">
+			<form 
+				action="/admin/profile/update" 
+				method="POST" 
+				class="input-group"
+				data-on:submit__prevent="@post('/admin/profile/update')"
+			>
+				<div style="display: flex; flex-direction: column; align-items: center; margin-bottom: var(--sl-spacing-large);">
+					<sl-avatar 
+						image={ auth.GetUserFromContext(ctx).AvatarURL } 
+						label={ auth.GetUserFromContext(ctx).Name }
+						style="--size: 8rem; font-size: 2.5rem; margin-bottom: var(--sl-spacing-medium);"
+					></sl-avatar>
+					<h2 style="margin: 0; font-size: var(--sl-font-size-large);">{ auth.GetUserFromContext(ctx).Name }</h2>
+					<p style="margin: 0; color: var(--sl-color-neutral-500);">{ auth.GetUserFromContext(ctx).Email }</p>
+				</div>
+
 				<sl-input label="Full Name" name="name" value={ auth.GetUserFromContext(ctx).Name }></sl-input>
-				<sl-input label="Email" name="email" type="email" value={ auth.GetUserFromContext(ctx).Email } disabled help-text="Email cannot be changed as it is linked to your GitHub account"></sl-input>
+				<sl-input label="Email" name="email" type="email" value={ auth.GetUserFromContext(ctx).Email } disabled help-text="Managed via GitHub"></sl-input>
 				
-				<sl-textarea label="Bio" name="bio" placeholder="Tell us a little about yourself..."></sl-textarea>
+				<sl-textarea label="Bio" name="bio" placeholder="Tell us a little about yourself..." resize="auto"></sl-textarea>
 				
-				<div style="display: flex; justify-content: flex-end; gap: var(--sl-spacing-medium); margin-top: var(--sl-spacing-medium);">
-					<sl-button variant="default" type="reset">Reset</sl-button>
+				<div style="display: flex; justify-content: flex-end; gap: var(--sl-spacing-medium); margin-top: var(--sl-spacing-large);">
 					<sl-button variant="primary" type="submit">Save Changes</sl-button>
 				</div>
 			</form>

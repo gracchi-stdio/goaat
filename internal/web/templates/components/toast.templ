@@ -1,0 +1,16 @@
+package components
+
+templ Toast(message string, variant string) {
+	<div id="alert-container">
+		<sl-alert variant={ variant } duration="3000" closable open>
+			if variant == "success" {
+				<sl-icon slot="icon" name="check-circle"></sl-icon>
+			} else if variant == "danger" {
+				<sl-icon slot="icon" name="exclamation-octagon"></sl-icon>
+			} else {
+				<sl-icon slot="icon" name="info-circle"></sl-icon>
+			}
+			{ message }
+		</sl-alert>
+	</div>
+}

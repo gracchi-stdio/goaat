@@ -4,39 +4,20 @@
  */
 
 .profile-page {
-  max-width: 900px;
+  margin: 0 auto;
+  
+  .profile-form-card {
+    max-width: 800px;
+    width: 100%;
+  }
 }
 
 .page-header {
-  margin-bottom: var(--sl-spacing-2x-large);
+  text-align: center;
 }
 
-.page-title {
-  font-size: var(--sl-font-size-2x-large);
-  font-weight: var(--sl-font-weight-semibold);
-  color: var(--sl-color-neutral-700);
-  margin: 0 0 var(--sl-spacing-x-small) 0;
-}
-
-.page-subtitle {
-  font-size: var(--sl-font-size-medium);
-  color: var(--sl-color-neutral-500);
-  margin: 0;
-}
-
-.profile-sections {
+.input-group {
   display: flex;
   flex-direction: column;
-  gap: var(--sl-spacing-x-large);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .page-title {
-    font-size: var(--sl-font-size-x-large);
-  }
-  
-  .page-subtitle {
-    font-size: var(--sl-font-size-small);
-  }
+  gap: var(--sl-spacing-medium);
 }

@@ -19,57 +19,41 @@ templ DashboardContent() {
 	</div>
 
 	<!-- Stats Grid -->
-	<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--sl-spacing-medium); margin-bottom: var(--sl-spacing-x-large);">
+	<div class="dashboard-grid">
 		<sl-card>
-			<div slot="header" style="display: flex; align-items: center; gap: var(--sl-spacing-small);">
-				<sl-icon name="folder" style="font-size: var(--sl-font-size-x-large); color: var(--sl-color-primary-600);"></sl-icon>
+			<div slot="header" class="card-header">
+				<sl-icon name="folder" class="icon-primary"></sl-icon>
 				<strong>Repositories</strong>
 			</div>
-			<div style="font-size: var(--sl-font-size-3x-large); font-weight: var(--sl-font-weight-bold); margin-bottom: var(--sl-spacing-x-small);">
-				0
-			</div>
-			<div style="color: var(--sl-color-neutral-500); font-size: var(--sl-font-size-small);">
-				Connected repositories
-			</div>
+			<div class="stat-value">0</div>
+			<div class="stat-label">Connected repositories</div>
 		</sl-card>
 
 		<sl-card>
-			<div slot="header" style="display: flex; align-items: center; gap: var(--sl-spacing-small);">
-				<sl-icon name="file-earmark-text" style="font-size: var(--sl-font-size-x-large); color: var(--sl-color-success-600);"></sl-icon>
+			<div slot="header" class="card-header">
+				<sl-icon name="file-earmark-text" class="icon-success"></sl-icon>
 				<strong>Documents</strong>
 			</div>
-			<div style="font-size: var(--sl-font-size-3x-large); font-weight: var(--sl-font-weight-bold); margin-bottom: var(--sl-spacing-x-small);">
-				0
-			</div>
-			<div style="color: var(--sl-color-neutral-500); font-size: var(--sl-font-size-small);">
-				Markdown files edited
-			</div>
+			<div class="stat-value">0</div>
+			<div class="stat-label">Markdown files edited</div>
 		</sl-card>
 
 		<sl-card>
-			<div slot="header" style="display: flex; align-items: center; gap: var(--sl-spacing-small);">
-				<sl-icon name="git" style="font-size: var(--sl-font-size-x-large); color: var(--sl-color-warning-600);"></sl-icon>
+			<div slot="header" class="card-header">
+				<sl-icon name="git" class="icon-warning"></sl-icon>
 				<strong>Commits</strong>
 			</div>
-			<div style="font-size: var(--sl-font-size-3x-large); font-weight: var(--sl-font-weight-bold); margin-bottom: var(--sl-spacing-x-small);">
-				0
-			</div>
-			<div style="color: var(--sl-color-neutral-500); font-size: var(--sl-font-size-small);">
-				Total commits made
-			</div>
+			<div class="stat-value">0</div>
+			<div class="stat-label">Total commits made</div>
 		</sl-card>
 
 		<sl-card>
-			<div slot="header" style="display: flex; align-items: center; gap: var(--sl-spacing-small);">
-				<sl-icon name="clock-history" style="font-size: var(--sl-font-size-x-large); color: var(--sl-color-danger-600);"></sl-icon>
+			<div slot="header" class="card-header">
+				<sl-icon name="clock-history" class="icon-danger"></sl-icon>
 				<strong>Recent Changes</strong>
 			</div>
-			<div style="font-size: var(--sl-font-size-3x-large); font-weight: var(--sl-font-weight-bold); margin-bottom: var(--sl-spacing-x-small);">
-				0
-			</div>
-			<div style="color: var(--sl-color-neutral-500); font-size: var(--sl-font-size-small);">
-				This week
-			</div>
+			<div class="stat-value">0</div>
+			<div class="stat-label">Pending changes</div>
 		</sl-card>
 	</div>
 

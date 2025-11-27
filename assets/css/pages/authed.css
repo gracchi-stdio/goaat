@@ -108,9 +108,44 @@
 
 .app-content {
   flex: 1;
-  padding: var(--sl-spacing-large);
-  max-width: 1400px;
-  width: 100%;
+  padding: var(--sl-spacing-2x-large);
+  overflow-y: auto;
+}
+
+/* ===== Common Page Styles ===== */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--sl-spacing-2x-large);
+  gap: var(--sl-spacing-large);
+}
+
+.page-title {
+  font-size: var(--sl-font-size-2x-large);
+  font-weight: var(--sl-font-weight-semibold);
+  color: var(--sl-color-neutral-700);
+  margin: 0 0 var(--sl-spacing-x-small) 0;
+}
+
+.page-subtitle {
+  font-size: var(--sl-font-size-medium);
+  color: var(--sl-color-neutral-500);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+  }
+  
+  .page-title {
+    font-size: var(--sl-font-size-x-large);
+  }
+  
+  .page-subtitle {
+    font-size: var(--sl-font-size-small);
+  }
 }
 
 /* ===== Responsive Design ===== */

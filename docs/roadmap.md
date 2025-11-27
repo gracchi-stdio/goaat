@@ -26,7 +26,7 @@ Build a multi-tenant backend for editing Astro Starlight content repositories.
 | 1B.2 Navigation component | ⬜ Todo | You | Links: Home, Profile, Login/Logout |
 | 1B.3 Home page (public) | ⬜ Todo | You | Simple landing for unauthenticated |
 | 1B.4 Dashboard page (auth) | ⬜ Todo | Together | User's main view after login |
-| 1B.5 User profile page | ⬜ Todo | Together | Show user info from session/DB |
+| 1B.5 User profile page | 🚧 In Progress | You | [Implementation Guide](tasks/1B.5-profile-page-implementation.md) |
 | 1B.6 Flash messages | ⬜ Todo | Copilot | Success/error notifications |
 | 1B.7 404 & error pages | ⬜ Todo | You | Custom error templates |
 

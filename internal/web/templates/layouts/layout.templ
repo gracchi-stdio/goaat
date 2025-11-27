@@ -60,22 +60,22 @@ templ AuthedLayout(title string, class string) {
 				<!-- Navigation Menu with Datastar -->
 				<nav class="sidebar-nav">
 					<button type="button"
-						data-on:click__viewtransition="@get('/admin/dashboard')">
+						data-on:click__viewtransition="@get('/admin/dashboard'); history.pushState(null, '', '/admin/dashboard')">
 						<sl-icon name="grid" library="default"></sl-icon>
 						<span>Dashboard</span>
 					</button>
 					<button type="button"
-						data-on:click__viewtransition="@get('/admin/repositories')">
+						data-on:click__viewtransition="@get('/admin/repositories'); history.pushState(null, '', '/admin/repositories')">
 						<sl-icon name="folder" library="default"></sl-icon>
 						<span>Repositories</span>
 					</button>
 					<button type="button"
-						data-on:click__viewtransition="@get('/admin/authors')">
+						data-on:click__viewtransition="@get('/admin/authors'); history.pushState(null, '', '/admin/authors')">
 						<sl-icon name="people" library="default"></sl-icon>
 						<span>Authors</span>
 					</button>
 					<button type="button"
-						data-on:click__viewtransition="@get('/admin/settings')">
+						data-on:click__viewtransition="@get('/admin/settings'); history.pushState(null, '', '/admin/settings')">
 						<sl-icon name="gear" library="default"></sl-icon>
 						<span>Settings</span>
 					</button>
@@ -101,12 +101,12 @@ templ AuthedLayout(title string, class string) {
 						</sl-button>
 						<sl-menu>
 							<sl-menu-item 
-								data-on:click__viewtransition="@get('/admin/profile')">
+								data-on:click__viewtransition="@get('/admin/profile'); history.pushState(null, '', '/admin/profile')">
 								<sl-icon slot="prefix" name="person"></sl-icon>
 								Profile
 							</sl-menu-item>
 							<sl-menu-item 
-								data-on:click__viewtransition="@get('/admin/settings')">
+								data-on:click__viewtransition="@get('/admin/settings'); history.pushState(null, '', '/admin/settings')">
 								<sl-icon slot="prefix" name="gear"></sl-icon>
 								Settings
 							</sl-menu-item>
@@ -133,7 +133,7 @@ templ AuthedLayout(title string, class string) {
 					</sl-button>
 					<sl-breadcrumb>
 						<sl-breadcrumb-item>
-							<button type="button" data-on:click__viewtransition="@get('/admin/dashboard')" style="all: unset; cursor: pointer; display: flex; align-items: center; gap: var(--sl-spacing-x-small);">
+							<button type="button" data-on:click__viewtransition="@get('/admin/dashboard'); history.pushState(null, '', '/admin/dashboard')" style="all: unset; cursor: pointer; display: flex; align-items: center; gap: var(--sl-spacing-x-small);">
 								<sl-icon name="house"></sl-icon>
 								Dashboard
 							</button>
